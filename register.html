@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Signup/Login</title>
+    <style>
+      body{
+        margin: 0;
+      }
+
+      nav{
+        display: flex;
+        padding: 10px;
+        background: rgb(1, 13, 44);
+     }
+     nav h2{
+      color: white;
+      font-size: 25px;
+     }
+     
+     nav li{
+      display: flex;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      list-style: none;
+
+     }
+     nav a{
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      margin: 0 15px;
+     }
+
+        nav a:hover {
+         
+            color: yellowgreen;
+            border-left: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            border-radius: 10px;
+          }  
+         .main{
+          height: 100vh;
+          display: flex;
+          
+          background-image: url(./images/02.jpg);
+          background-size: cover;
+
+         } 
+      
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        width: 45%;
+        background-color: rgb(1, 13, 44);
+        border-top-right-radius: 30%;
+        border-bottom-right-radius: 30%;
+
+        
+      }
+     
+
+      /* Style for the form container */
+      .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px #ccc;
+        width: 80%;
+        background-color: #ffffff;
+      }
+
+      /* Style for the form input fields */
+      input[type="text"], input[type="password"], input[type="email"], input[type="file"] {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 25%;
+        margin-left: 12px;
+      }
+      select{
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 29%;
+        margin-left: 12px; 
+      }
+
+      /* Style for the form submit button */
+      input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 180px;
+      }
+
+      /* Style for the form header */
+      h3 {
+        font-size: 30px;
+        margin: 0;
+        margin-bottom: 10px;
+      }
+
+      /* Style for the form footer */
+      p {
+        margin: 0;
+        margin-top: 20px;
+        font-size: 15px;
+      }
+
+      .footer{
+        color: #FFFFFF;
+        background: rgb(1, 13, 44);
+        text-align: center;
+        padding: 20px;
+
+    }
+    #capture{
+      background: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      
+    }
+    #capture:hover{
+      background: #8f0404;
+      transition: 0.5s ease-out;
+    }
+    @media screen and (max-width: 913px){
+      .main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .form-container{
+        width: 100%;
+      }
+      
+    }
+    </style>
+  </head>
+  <body>
+
+    <nav>
+      <h2>O E F R <span style="color: yellowgreen;">A </span>S</h2>
+      <ul>
+        <li>
+          <a href="index.html">Home</a>
+          <a href="adminlog.html" style="background-color: #0b5885; color: #fff; text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="main">
+    <div class="container">
+      <div class="form-container">
+        <h3>Sign up</h3>
+        <form method="POST" action="insert.php">
+          <pre>
+  <video id="video" width="220" height="140" style="margin: 0;" autoplay></video><canvas id="canvas" width="200" height="140" name="image" required></canvas>
+                            <button id="capture">Capture</button>
+        </pre>
+          <input type="text" placeholder="Fullname" name="fullname" required>
+          <input type="text" placeholder="Username" name="username" required>
+          <input type="email" placeholder="Email" name="email" required>
+          <input type="hidden" accept="" name="image_data" id="image-data" required>
+          <select name="department" id="department" required>
+              <option value="" disabled selected>Select Option</option>
+              <option value="UI DESIGNER">UI Designer</option>
+              <option value="PROGRAMMER">Programmer</option>
+              <option value="TESTER">Tester</option>
+          </select>
+          
+          <input type="password" placeholder="Password" name="password" required>
+          <input type="password" placeholder="ConfirmPassword" required><br>
+          &nbsp; <input type="checkbox" required><a href="tems&conditions.html" target="_blank" style="text-decoration: none;">  Accept all terms and condition</a>
+          <br><br>
+          <input type="submit" value="SignUp">
+      </form>
+      
+        <p>Already have an account? <a href="login.html">Log in</a></p>
+
+      </div>
+    </div>
+   
+    </div>
+    <div class="footer">&COPY;2023</div>
+
+    <script>
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      const captureButton = document.getElementById('capture');
+      const imageDataInput = document.getElementById('image-data');
+      const imageInput = document.getElementById('image');
+      
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          video.srcObject = stream;
+        })
+        .catch(error => {
+          console.error('Error accessing webcam:', error);
+        });
+      
+      captureButton.addEventListener('click', () => {
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageDataURL = canvas.toDataURL('image/png');
+        imageDataInput.value = imageDataURL;
+      });
+      
+      imageInput.addEventListener('change', () => {
+        const file = imageInput.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          imageDataInput.value = reader.result;
+        };
+        reader.onerror = (error) => {
+          console.error('Error reading image:', error);
+        };
+      });
+    </script>
+
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=17cdf8cd-def1-4157-a6da-f19c801ef92e"> </script>
+  </body>
+</html>
+
