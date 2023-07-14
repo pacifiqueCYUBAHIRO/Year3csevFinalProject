@@ -101,7 +101,6 @@ a:hover i{
 
 /* MAin Section */
 .main{
-  position: relative;
   padding: 20px;
   width: 100%;
 }
@@ -118,14 +117,14 @@ a:hover i{
 }
 .main .users{
   display: flex;
-  flex-wrap: wrap;  
+  flex-wrap: wrap; 
 }
 .users .card{
   width: 23%;
   margin: 10px;
   background: #fff;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 10px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
@@ -164,8 +163,9 @@ a:hover i{
   border: 1px solid black;
 }
 .users .card button:hover{
-  background: black;
-  color: #fff;
+  background: #f3f3f3;
+  color: #000;
+  box-shadow: 3px 3px 3px rgba(0,12,12);
   transition: 0.5s;
 }
 
@@ -179,7 +179,7 @@ a:hover i{
   padding: 10px;
   margin-top: 10px;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 .table{
@@ -191,8 +191,9 @@ a:hover i{
   border-radius: 5px 5px 0 0;
 }
 table thead tr{
-  color: #fff;
-  background: black;
+  color: bla;
+  background: rgb(223, 223, 223);
+  box-shadow: 5px 5px 5px rgba(0,12,12);
   text-align: left;
   font-weight: bold;
 }
@@ -207,7 +208,7 @@ table thead tr{
   background: #f3f3f3;
 }
 .table tbody tr:hover{
-  font-weight: 500;
+  
   color: black;
 }
 .table tbody tr:last-of-type{
@@ -221,7 +222,7 @@ table thead tr{
   border: 1px solid black;
 }
 .table button:hover{
-  background: black;
+  background: #f3f3f3;
   color: #fff;
   transition: 0.5rem;
 }
@@ -234,28 +235,68 @@ table thead tr{
   padding: 20px;
 }
 .popup{
-  width: 500px;
- 
-  border-radius: 10px;
+  width: 70%;
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
   background: #f3f3f3;
-  position: absolute;
+  position: fixed;
   padding: 10px;
-  left: 30%;
-  transform: translate(-50%, -50%) scale(0.1);
-  visibility: hidden;
-  transition: transform 0.4s, bottom 0.4s;
+  left: 50%;
   cursor: pointer;
-  color: #fff;
+  z-index: 9999;
+  display: none;
+
 
 }
-.popup img{
-    right: 0;
+#backgroundOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.7;
+  z-index: 9998;
+  display: none;
 }
+
 .open-popup{
   visibility: visible;
   top: 40%;
+  opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
+.container-pop{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.picture{
+  width: 50%;
+  margin: 20px;
+  margin-left: 100px;
+}
+.info{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.info p{
+  font-weight: bold;
+}
+.info table{
+  margin-top: 100px;
+}
+.percentage td{
+  font-weight: bold;
+}
+.percentage table{
+  margin-top: -150px;
+}
+.percentage td span{
+  font-weight: 200;
+}
+
 
 @media screen and (max-width:858px){
    
@@ -303,141 +344,136 @@ table thead tr{
         <h1>Attendance</h1>
         <i class="fas fa-user-cog"></i>
       </div>
+      
       <div class="users">
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Elisse</h4>
-          <p>Ui designer</p>
-          <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div>
-          <button id="profile">Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Elisse</h4>
-          <p>Ui designer</p>
-          <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div>
-          <button id="profile">Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Elisse</h4>
-          <p>Ui designer</p>
-          <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div>
-          <button id="profile">Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Elisse</h4>
-          <p>Ui designer</p>
-          <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div>
-          <button id="profile">Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Kellen</h4>
-          <p>Progammer</p>
-          <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div>
-          <button onclick="openPopup();">Profile</button>
-        </div>
-        <div class="popup" title="click to close" id="popup">
-          <img src="./images/xx.png" width="20px" height="20px" style="margin-right: -300px; background: red;" alt="" onclick="closePopup();">
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Alliance</h4>
-          <p>tester</p>
-          <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div>
-          <button>Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Faustin</h4>
-          <p>Ui designer</p>
-          <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div>
-          <button>Profile</button>
-        </div>
-      </div>
+        <?php
+      $host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'pacifique';
 
+$connection = mysqli_connect($host, $user, $password, $database);
+
+if (!$connection) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+          FROM employees
+          INNER JOIN attendance ON employees.username = attendance.username";
+
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    die('Query failed: ' . mysqli_error($connection));
+}      
+        while ($row = mysqli_fetch_assoc($result)) {
+          echo'<div class="card">';
+          echo'<img src="./images/admin.jpeg">';
+           echo '<h4>' . $row['username'] . '</h4>';
+           echo '<p>' . $row['department'] . '</p>';
+          echo'<div class="per">';
+            echo'<table>';
+              echo'<tr>';
+                echo'<td><span>85%</span></td>';
+                echo'<td><span>87%</span></td>';
+              echo'</tr>';
+              echo'<tr>';
+                echo'<td>Month</td>';
+                echo'<td>Year</td>';
+              echo'</tr>';
+            echo'</table>';
+          echo'</div>';
+          echo'<button id="profile" onclick="openPopup();">Profile</button>';
+        echo'</div>';
+      }
+      
+      
+      // Close the database connection
+      mysqli_close($connection);
+      ?>
+      
+
+       
+          <?php
+      $host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'pacifique';
+
+$connection = mysqli_connect($host, $user, $password, $database);
+
+if (!$connection) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+          FROM employees
+          INNER JOIN attendance ON employees.username = attendance.username";
+
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    die('Query failed: ' . mysqli_error($connection));
+}    
+
+
+
+
+
+
+
+        while ($row = mysqli_fetch_assoc($result)) {
+          echo'<div class="popup" id="popup">';
+          echo'<h1 style="text-align: center; padding: 10px;">PROFILE</h1>';
+
+          echo'<div class="container-pop">';
+            echo'<div class="picture"><img src="." width="300px" height="350px" alt=""></div>';
+            echo'<div class="info">';
+            echo'<table>';
+                  echo'<tr>';
+                  echo'<td>';
+            echo' <p>Fullname:</p>';
+              echo'<span>'. $row['fullname']. '</span>';echo'</td>';
+              echo'<td>';
+              echo'<p>Username:</p>';echo'<span>'. $row['username']. '</span>';echo'</td>';
+             echo'<td>';
+              echo'<p>Email:</p>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
+              echo'<tr>';echo'<td>';
+             echo'<p>Department:</p>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
+             echo'<td>';
+             echo'<p>Date:</p>'; echo'<span>'. $row['date']. '</span>';echo'</td>';
+             echo'</tr>';
+             echo'</table>';
+      
+              echo'<div class="percentage">';
+                echo'<table>';
+                  echo'<tr>';
+                  echo'<td>Month</td>';
+                    echo'<td>Year</td>';
+                    
+                  echo'</tr>';
+                  echo'<tr>';
+                  echo'<td><span>85%</span></td>';
+                    echo'<td><span>87%</span></td>';
+                  echo'</tr>';
+                echo'</table>';
+                echo'</div>';
+              
+    
+
+              echo'</div>';
+              echo'</div>';
+              echo'</div>';
+            }
+ mysqli_close($connection);
+      ?>
+       
+      <div id="backgroundOverlay" onclick="closePopup();"></div>
       <section class="attendance">
         <div class="attendance-list">
           <h1>Attendance List</h1>
+         
           <?php
 
 $host = 'localhost';
@@ -451,9 +487,9 @@ if (!$connection) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-$query = "SELECT attendance.username, employees.fullname, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
           FROM employees
-          INNER JOIN attendance ON employees.id = attendance.id";
+          INNER JOIN attendance ON employees.username = attendance.username";
 
 $result = mysqli_query($connection, $query);
 
@@ -462,11 +498,12 @@ if (!$result) {
 }
 
 // Start the attendance table body
-echo '<table class="table">';
+echo '<table class="table" id="excell">';
 echo '<thead>';
 echo '<tr>';
 echo '<th id="user">Username</th>';
 echo '<th>Fullname</th>';
+echo '<th>Email</th>';
 echo '<th>Department</th>';
 echo '<th>Date</th>';
 echo '<th>Join Time</th>';
@@ -480,6 +517,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '<tr>';
     echo '<td>' . $row['username'] . '</td>';
     echo '<td>' . $row['fullname'] . '</td>';
+    echo '<td>' . $row['email'] . '</td>';
     echo '<td>' . $row['department'] . '</td>';
     echo '<td>' . $row['date'] . '</td>';
     echo '<td>' . $row['join_time'] . '</td>';
@@ -495,6 +533,7 @@ echo '</table>';
 // Close the database connection
 mysqli_close($connection);
 ?>
+ <button id="view-btn" style="padding: 10px 20px; border-radius:5px; margin-left: 500px; cursor:pointer; border: 1px solid black;">Save</button>
         </div>
       </section>
     </section>
@@ -503,44 +542,42 @@ mysqli_close($connection);
 
 <script>
   
-  
+  const backgroundOverlay = document.getElementById("backgroundOverlay");
   let popup = document.getElementById('popup');
 function openPopup() {
   popup.classList.add("open-popup");
+  popup.style.display = "block";
+  backgroundOverlay.style.display = "block";
 }
 function closePopup() {
   popup.classList.remove("open-popup");
+  popup.style.display = "none";
+  backgroundOverlay.style.display = "none";
 }
 </script>
 
 
 <!-- <script>
-function exportToExcel() {
-  /* Get table element */
-  var table = document.getElementById("myTable");
+  // Assuming you have a <div> element with the id "myDiv" that contains the data
+var divData = document.getElementById('.excell').innerHTML;
 
-  /* Convert table to workbook */
-  var workbook = XLSX.utils.table_to_book(table);
+// Format the data as CSV (comma-separated values)
+var csvContent = "fullname, username, join_time\n"; // Header row
+csvContent += divData; // Add the div data to the CSV content
 
-  /* Convert workbook to Excel file */
-  var excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+// Create a Blob with the CSV data
+var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-  /* Save Excel file */
-  saveAsExcelFile(excelBuffer, 'data.xlsx');
-}
+// Create a temporary anchor element to trigger the download
+var link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = 'data.csv';
 
-function saveAsExcelFile(buffer, fileName) {
-  /* Convert buffer to Blob */
-  var data = new Blob([buffer], { type: 'application/octet-stream' });
+// Append the anchor element to the document body and click it to trigger the download
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
 
-  /* Create download link */
-  var link = document.createElement('a');
-  link.href = window.URL.createObjectURL(data);
-  link.download = fileName;
-
-  /* Trigger the download */
-  link.click();
-}
 </script> -->
 </body>
 </html>

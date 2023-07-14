@@ -14,7 +14,7 @@
         }
         body{
             margin: 0;
-            background: #ccc;
+            padding: 0;
             
         }
       
@@ -60,9 +60,12 @@
           margin: 0 15px;
          }
               
-              /* Change the color of links on hover */
               nav a:hover {
-             
+             transition: 0.4s ease-in-out;
+                color: yellowgreen;
+              }
+              button:hover{
+                font-weight: 400px;
                 color: yellowgreen;
               }
           
@@ -131,18 +134,8 @@
         }
 
         .active{
-            border-radius: 10px;
             transition: 0.2s ease-in;
-            border-left: 2px solid #000;
-            border-bottom: 1px solid rgb(198, 179, 218);
-        }
-
-        a:hover{
-            color: greenyellow;
-            border-radius: 10px;
-            transition: 0.2s ease-in;
-            border-left: 2px solid #000;
-            border-bottom: 1px solid rgb(198, 179, 218);
+            color:  yellowgreen;
         }
         .wave{
             width: 100%;
@@ -159,7 +152,7 @@
             align-items: center;
             
             margin-top: -10px;
-            background: radial-gradient(circle,white, white, #ddebf3, #cfe6f3, white);
+            /* background: radial-gradient(circle,white, white, #ddebf3, #cfe6f3, white); */
         }
         .about{
             
@@ -268,6 +261,38 @@ nav ul li a{
             }
             
           }
+            .whoweare{
+                        background-color: #f0eeee;
+                        margin-top: -4px;
+                        padding: 40px 0;
+                    }
+
+          .bbox{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            
+          }
+         
+          .pic{
+            width: 400px;
+            margin: 50px;
+            background: #0b5885;
+            border-radius: 50%;
+          }
+          .desc{
+            width: 50%;
+            margin: 20px;
+          }
+        .partiner{
+            display: flex;
+            justify-content: center;
+            width: 80%;
+            border-radius: 10px;
+            padding: 30px;
+            background: #2652af;
+          }
     </style>
     
 </head>
@@ -282,9 +307,9 @@ nav ul li a{
             <ul>
               <li>
                 <a href="index.html" class="active">Home</a>
-                <a href="#about">About Us</a>
+                <a href="#about">Who we are & About Us</a>
                 <a href="login.html">Attendance</a>
-               <a href="adminlog.html" style="background-color: #0b5885; color: #fff; text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
+               <a href="adminlog.html" style="background-color: #0b5885; text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
               </li>
             </ul>
           </nav> 
@@ -308,10 +333,34 @@ nav ul li a{
      </div>
     </div>
     <div class="wave"><img src="./images/wave1.png" alt="" style="margin-top: 15px; width: 100%;" id="about"></div>
+
+
+    <div class="whoweare">
+        <h4 style="font-size: 36px; text-align:center;">Who we are</h4>
+     
+
+        <div class="bbox">
+        <div class="pic">
+            <img src="./images/11.png" width="400px" height="400px" alt="">
+        </div>
+        <div class="desc">
+            <h2>We are OEFR <span style="color: yellowgreen;">A </span>S</h2>
+            <p>An Online Employee Facial Recognition Attendance System is a technology that uses facial recognition technology to track employee attendance in a workplace. The system captures the employee's facial features and matches them to their identification in a database. This technology offers a fast and convenient way of tracking employee attendance, as employees simply walk in front of a camera to have their attendance recorded.
+                The human face plays an important role in our day-to-day life mostly for the identification of a person.
+                Face recognition is a part of biometric identification that extracts a face’s facial features, then stores it as a unique face print to uniquely recognize a person. 
+                Biometric face recognition technology has gained the attention of many researchers because of its wide application. <br>
+                Face recognition technology is better than other biometric-based recognition techniques like fingerprint, palm print, and iris because of its non-contact process. Recognition techniques using face recognition can also recognize a person from a distance, without any contact or interaction with the person. 
+                Face recognition techniques can also be used in crime reports, the captured photo can be stored in a database and can be used to identify a person. For face recognition, we require a large dataset and complex features to identify a person in all conditions like a change of illumination, age, pose, etc. 
+                Recent researches show there is a betterment in facial recognition systems. <br>
+        </p>
+        </div>
+    </div></div>
+   
+
     <section  style="background-color: #fff;">
         <div class="about">
                 <h3>ABOUT</h3>
-                <p style="text-align:left; font-size: 18px;">The consumer-facing applications of facial recognition technology continue to evolve and appear
+                <p style="text-align:center; font-size: 18px;">The consumer-facing applications of facial recognition technology continue to evolve and appear
     in new contexts. <br> There are several key functions that benefit from facial recognition technology,
     including: <br>(1) safety and security; <br>(2) access and authentication; <br>(3) photograph and video
     storage identification and organization; <br>(4) accessibility to platforms, accounts, or services, and
@@ -349,8 +398,7 @@ nav ul li a{
     platforms developing and using facial recognition technology in commercial settings; <br> to establish
     a foundation of protections for personal data that is deserving of user trust; and to inform the
     conversation behind various legislative initiatives on the specifics of the technology, and the
-    technical and policy protections available. <br><br>
-    <img src="./images/02.jpg" width="100%" alt="">
+    technical and policy protections available. <br>
 
      <br><strong> These Principles are intended to set industry best
     practices, inform consumer expectations, and educate policymakers regarding the various
@@ -366,7 +414,16 @@ nav ul li a{
         </div>
     </section>
 
-    <div class="footer">&COPY;2023</div>
+    <div style="display: flex; align-items: center; justify-content: center; padding: 50px;">
+    <div class="partiner">
+        <h1>Our partiners</h1>
+        <img src="./images/ulk.png" width="150px" height="100px" alt="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="./images/ulk.png" width="150px" height="100px" alt="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="./images/ulk.png" width="150px" height="100px" alt="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="./images/ulk.png" width="150px" height="100px" alt="">
+    </div></div>
+
+    <div class="footer">&COPY; 2023</div>
 
 <script>
     function register(){

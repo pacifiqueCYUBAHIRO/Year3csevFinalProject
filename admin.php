@@ -11,7 +11,7 @@ if (!isset($_SESSION['logged-in'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Admin Attendance</title>
   <!-- <link rel="stylesheet" href="styles.css"> -->
   <style>
     /*  import google fonts */
@@ -101,15 +101,10 @@ a:hover i{
 
 /* MAin Section */
 .main{
-  position: relative;
   padding: 20px;
   width: 100%;
 }
 .main-top{
-  position: sticky;
-  top: 0;
-  background: rgb(226, 226, 226);
-  padding: 20px;
   display: flex;
   width: 100%;
 }
@@ -122,14 +117,14 @@ a:hover i{
 }
 .main .users{
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; 
 }
 .users .card{
   width: 23%;
   margin: 10px;
   background: #fff;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 10px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
@@ -168,8 +163,9 @@ a:hover i{
   border: 1px solid black;
 }
 .users .card button:hover{
-  background: black;
-  color: #fff;
+  background: #f3f3f3;
+  color: #000;
+  box-shadow: 3px 3px 3px rgba(0,12,12);
   transition: 0.5s;
 }
 
@@ -183,7 +179,7 @@ a:hover i{
   padding: 10px;
   margin-top: 10px;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 .table{
@@ -195,8 +191,9 @@ a:hover i{
   border-radius: 5px 5px 0 0;
 }
 table thead tr{
-  color: #fff;
-  background: black;
+  color: bla;
+  background: rgb(223, 223, 223);
+  box-shadow: 5px 5px 5px rgba(0,12,12);
   text-align: left;
   font-weight: bold;
 }
@@ -211,7 +208,7 @@ table thead tr{
   background: #f3f3f3;
 }
 .table tbody tr:hover{
-  font-weight: 500;
+  
   color: black;
 }
 .table tbody tr:last-of-type{
@@ -225,7 +222,7 @@ table thead tr{
   border: 1px solid black;
 }
 .table button:hover{
-  background: black;
+  background: #f3f3f3;
   color: #fff;
   transition: 0.5rem;
 }
@@ -238,37 +235,70 @@ table thead tr{
   padding: 20px;
 }
 .popup{
-  width: 200px;
- 
-  border-radius: 20px;
-  background: #080808;
-  position: absolute;
+  width: 70%;
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  background: #f3f3f3;
+  position: fixed;
   padding: 10px;
-  left: 30%;
-  margin-top: 50px;
-  transform: translate(-50%, -50%) scale(0.1);
-  visibility: hidden;
-  transition: transform 0.4s, bottom 0.4s;
+  left: 50%;
   cursor: pointer;
-  color: #fff;
+  z-index: 9999;
+  display: none;
+
 
 }
+#backgroundOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.7;
+  z-index: 9998;
+  display: none;
+}
+
 .open-popup{
   visibility: visible;
   top: 40%;
+  opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
+.container-pop{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.picture{
+  width: 50%;
+  margin: 20px;
+  margin-left: 100px;
+}
+.info{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.info p{
+  font-weight: bold;
+}
+.info table{
+  margin-top: 100px;
+}
+.percentage td{
+  font-weight: bold;
+}
+.percentage table{
+  margin-top: -150px;
+}
+.percentage td span{
+  font-weight: 200;
+}
+
 
 @media screen and (max-width:858px){
-  .main .users{
-    display: flex;
-    flex-direction: column;
-    
-  }
-  .attendance-list{
-    display: grid;
-    grid-template-columns: (2, 2fr);
-  }
    
 }
   </style>
@@ -279,7 +309,7 @@ table thead tr{
   <div class="container">
     <nav>
       <ul>
-        <li><a href="#" class="logo">
+        <li><a href="admin.php" class="logo">
           <img src="./images/photo.png">
           <span class="nav-item">Admin</span>
         </a></li>
@@ -292,7 +322,7 @@ table thead tr{
           <i class="fas fa-database"></i>
           <span class="nav-item">Report</span>
         </a></li>
-        <li><a href="attend.php">
+        <li><a href="admin.php">
           <i class="fas fa-chart-bar"></i>
           <span class="nav-item">Attendance</span>
         </a></li>
@@ -311,46 +341,123 @@ table thead tr{
 
     <section class="main">
       <div class="main-top">
-        <h1>Dashboard</h1>
-       <i class="fas fa-user-cog"></i>
+        <h1>Attendance</h1>
+        <i class="fas fa-user-cog"></i>
       </div>
+      
       <div class="users">
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Elisse</h4>
-          <p>Ui designer</p>
-          <!-- <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div> -->
-          <button id="profile">Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Kellen</h4>
-          <p>Progammer</p>
+        <?php
+      $host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'pacifique';
+
+$connection = mysqli_connect($host, $user, $password, $database);
+
+if (!$connection) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+          FROM employees
+          INNER JOIN attendance ON employees.username = attendance.username";
+
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    die('Query failed: ' . mysqli_error($connection));
+}      
+        while ($row = mysqli_fetch_assoc($result)) {
+          echo'<div class="card">';
+          echo'<img src="./images/admin.jpeg">';
+           echo '<h4>' . $row['username'] . '</h4>';
+           echo '<p>' . $row['department'] . '</p>';
           
-          <button onclick="openPopup();">Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Kellen</h4>
-          <p>Progammer</p>
-          
-          <button onclick="openPopup();">Profile</button>
-        </div>
-        <div class="popup" title="click to close" id="popup">
-          You made  it
-          <img src="./images/xx.png" width="20px" height="20px" style="margin-right: -300px; background: red;" alt="" onclick="closePopup();">
-        </div>
+          echo'<button id="profile" onclick="openPopup();">Profile</button>';
+        echo'</div>';
+      }
+      
+      
+      // Close the database connection
+      mysqli_close($connection);
+      ?>
+      
+
+       
+          <?php
+      $host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'pacifique';
+
+$connection = mysqli_connect($host, $user, $password, $database);
+
+if (!$connection) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+          FROM employees
+          INNER JOIN attendance ON employees.username = attendance.username";
+
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    die('Query failed: ' . mysqli_error($connection));
+}    
+
+
+
+
+
+
+
+        while ($row = mysqli_fetch_assoc($result)) {
+          echo'<div class="popup" id="popup">';
+          echo'<h1 style="text-align: center; padding: 10px;">PROFILE</h1>';
+
+          echo'<div class="container-pop">';
+            echo'<div class="picture"><img src="." width="300px" height="350px" alt=""></div>';
+            echo'<div class="info">';
+            echo'<table>';
+                  echo'<tr>';
+                  echo'<td>';
+            echo' <p>Fullname:</p>';
+              echo'<span>'. $row['fullname']. '</span>';echo'</td>';
+              echo'<td>';
+              echo'<p>Username:</p>';echo'<span>'. $row['username']. '</span>';echo'</td>';
+             echo'<td>';
+              echo'<p>Email:</p>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
+              echo'<tr>';echo'<td>';
+             echo'<p>Department:</p>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
+             echo'<td>';
+             echo'<p>Date:</p>'; echo'<span>'. $row['date']. '</span>';echo'</td>';
+             echo'</tr>';
+             echo'</table>';
+      
+              echo'<div class="percentage">';
+                echo'<table>';
+                  echo'<tr>';
+                  echo'<td>Month</td>';
+                    echo'<td>Year</td>';
+                    
+                  echo'</tr>';
+                  echo'<tr>';
+                  echo'<td><span>85%</span></td>';
+                    echo'<td><span>87%</span></td>';
+                  echo'</tr>';
+                echo'</table>';
+                echo'</div>';
+              
+    
+
+              echo'</div>';
+              echo'</div>';
+              echo'</div>';
+            }
+ mysqli_close($connection);
+      ?>
+        <div id="backgroundOverlay" onclick="closePopup();"></div>
         <div class="card">
           <img src="./images/admin.jpeg">
           <h4>Alliance</h4>
@@ -373,7 +480,7 @@ table thead tr{
           <table class="table">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Email</th>
                 <th>Name</th>
                 <th>Depart</th>
                 <th>Date</th>
@@ -390,7 +497,7 @@ table thead tr{
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><button id="view-btn">View</button></td>
+                <td><button id="view-btn" onclick="view_btn()">View</button></td>
               </tr>
             </tbody>
           </table>
@@ -403,12 +510,21 @@ table thead tr{
 <script>
   
   
+  const backgroundOverlay = document.getElementById("backgroundOverlay");
   let popup = document.getElementById('popup');
 function openPopup() {
   popup.classList.add("open-popup");
+  popup.style.display = "block";
+  backgroundOverlay.style.display = "block";
 }
 function closePopup() {
   popup.classList.remove("open-popup");
+  popup.style.display = "none";
+  backgroundOverlay.style.display = "none";
+}
+
+function view_btn(){
+  window.location.href = "attend.php";
 }
 </script>
 

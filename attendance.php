@@ -123,10 +123,7 @@ if (mysqli_num_rows($result) > 0) {
       
               nav a:hover {
                
-                  color: yellowgreen;
-                  border-left: 1px solid #fff;
-                  border-bottom: 1px solid #fff;
-                  border-radius: 10px;
+                  color: yellowgreen; 
                 }        
         h1{
             padding: 10px;
@@ -228,7 +225,7 @@ if (mysqli_num_rows($result) > 0) {
 </div>
 
 
-<div class="footer"> &COPY;2023</div>
+<div class="footer"> &COPY; 2023</div>
 <script>
 async function getWebCam(){
     try{
