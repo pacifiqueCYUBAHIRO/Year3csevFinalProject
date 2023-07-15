@@ -235,7 +235,7 @@ table thead tr{
   padding: 20px;
 }
 .popup{
-  width: 70%;
+  width: 50%;
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
   background: #f3f3f3;
@@ -273,19 +273,18 @@ table thead tr{
 }
 .picture{
   width: 50%;
-  margin: 20px;
-  margin-left: 100px;
+  margin: 30px;
 }
 .info{
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 50%;
+  margin-top: -100px;
 }
 .info p{
   font-weight: bold;
-}
-.info table{
-  margin-top: 100px;
 }
 .percentage td{
   font-weight: bold;
@@ -358,9 +357,7 @@ if (!$connection) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
-          FROM employees
-          INNER JOIN attendance ON employees.username = attendance.username";
+$query = "SELECT username, fullname, email, department FROM employees";
 
 $result = mysqli_query($connection, $query);
 
@@ -407,7 +404,7 @@ if (!$connection) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.join_time, attendance.logout_time
           FROM employees
           INNER JOIN attendance ON employees.username = attendance.username";
 
@@ -417,32 +414,23 @@ if (!$result) {
     die('Query failed: ' . mysqli_error($connection));
 }    
 
-
-
-
-
-
-
         while ($row = mysqli_fetch_assoc($result)) {
           echo'<div class="popup" id="popup">';
           echo'<h1 style="text-align: center; padding: 10px;">PROFILE</h1>';
 
           echo'<div class="container-pop">';
-            echo'<div class="picture"><img src="." width="300px" height="350px" alt=""></div>';
+            echo'<div class="picture"><img src="./images/photo.png" width="200px" height="250px" alt=""></div>';
             echo'<div class="info">';
             echo'<table>';
                   echo'<tr>';
-                  echo'<td>';
-            echo' <p>Fullname:</p>';
-              echo'<span>'. $row['fullname']. '</span>';echo'</td>';
-              echo'<td>';
-              echo'<p>Username:</p>';echo'<span>'. $row['username']. '</span>';echo'</td>';
-             echo'<td>';
-              echo'<p>Email:</p>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
-              echo'<tr>';echo'<td>';
-             echo'<p>Department:</p>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
-             echo'<td>';
-             echo'<p>Date:</p>'; echo'<span>'. $row['date']. '</span>';echo'</td>';
+                  echo'<td>';echo' <p>Fullname:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['fullname']. '</span>';echo'</td>';echo'</tr>';
+              echo'<tr>';
+              echo'<td>';echo'<p>Username:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['username']. '</span>';echo'</td>';echo'</tr>';
+             echo'<tr>';
+             echo'<td>';echo'<p>Email:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
+             echo'</tr>';
+              echo'<td>';echo'<p>Department:</p>';echo'</td>';echo'<td>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
+             
              echo'</tr>';
              echo'</table>';
       
