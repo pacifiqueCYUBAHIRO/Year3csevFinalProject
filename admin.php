@@ -1,18 +1,22 @@
 <?php 
-session_start();
-if (!isset($_SESSION['logged-in'])) {
-	header('Location: adminlog.html');
-// echo $_SESSION['logged-in'];
-}
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "pacifique";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+$sql = "SELECT image_data, username, department from employees";
+$all_data = $conn->query($sql);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Attendance</title>
-  <!-- <link rel="stylesheet" href="styles.css"> -->
+  <meta charset="UTF-8" />
+  <title>Attendance Dashboard</title>
   <style>
     /*  import google fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
@@ -87,12 +91,12 @@ a:hover{
   background: #eee;
 }
 a:hover i{
-  color: black;
+  color: #34AF6D;
   transition: 0.5s;
 }
 .logout{
   position: absolute;
-  bottom: 10px;
+  bottom: 0;
 }
 
 .container{
@@ -101,6 +105,7 @@ a:hover i{
 
 /* MAin Section */
 .main{
+  position: relative;
   padding: 20px;
   width: 100%;
 }
@@ -117,14 +122,15 @@ a:hover i{
 }
 .main .users{
   display: flex;
-  flex-wrap: wrap; 
+  width: 100%;
 }
 .users .card{
-  width: 23%;
+  display: inline-block;
+  width: 25%;
   margin: 10px;
   background: #fff;
   text-align: center;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 10px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
@@ -160,12 +166,11 @@ a:hover i{
   cursor: pointer;
   border-radius: 10px;
   background: transparent;
-  border: 1px solid black;
+  border: 1px solid #4AD489;
 }
 .users .card button:hover{
-  background: #f3f3f3;
-  color: #000;
-  box-shadow: 3px 3px 3px rgba(0,12,12);
+  background: #4AD489;
+  color: #fff;
   transition: 0.5s;
 }
 
@@ -179,7 +184,7 @@ a:hover i{
   padding: 10px;
   margin-top: 10px;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 .table{
@@ -191,9 +196,9 @@ a:hover i{
   border-radius: 5px 5px 0 0;
 }
 table thead tr{
-  color: bla;
-  background: rgb(223, 223, 223);
-  box-shadow: 5px 5px 5px rgba(0,12,12);
+  color: #fff;
+  background: #34AF6D;
+  border: 2px solid #34AF6D;
   text-align: left;
   font-weight: bold;
 }
@@ -207,33 +212,28 @@ table thead tr{
 .table tbody tr:nth-of-type(odd){
   background: #f3f3f3;
 }
-.table tbody tr:hover{
-  
-  color: black;
-}
 .table tbody tr:last-of-type{
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid #4AD489;
+}
+.table tbody tr{
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  
 }
 .table button{
   padding: 6px 20px;
   border-radius: 10px;
   cursor: pointer;
   background: transparent;
-  border: 1px solid black;
+  border: 1px solid #4AD489;
 }
 .table button:hover{
-  background: #f3f3f3;
+  background: #4AD489;
   color: #fff;
   transition: 0.5rem;
 }
-.footer{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  color: white;
-  padding: 20px;
-}
+
+
 .popup{
   width: 50%;
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
@@ -281,33 +281,44 @@ table thead tr{
   justify-content: center;
   align-items: center;
   width: 50%;
+  margin-top: 10px;
 }
 .info p{
   font-weight: bold;
 }
-
-
-@media screen and (max-width:858px){
-   
+.percentage td{
+  font-weight: bold;
 }
+.percentage table{
+  margin-top: 10px;
+}
+.percentage td span{
+  font-weight: 200;
+}
+
   </style>
-  <!-- Font Awesome Cdn Link -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 </head>
 <body>
   <div class="container">
+
+
     <nav>
       <ul>
-        <li><a href="admin.php" class="logo">
+        <li><a href="#" class="logo">
           <img src="./images/photo.png">
           <span class="nav-item">Admin</span>
         </a></li>
-        <li><a href="admin.php">
+        <li><a href="#">
           <i class="fas fa-menorah"></i>
           <span class="nav-item">Dashboard</span>
         </a></li>
-       
-        <li><a href="report.html">
+        <li><a href="#">
+          <i class="fas fa-comment"></i>
+          <span class="nav-item">Message</span>
+        </a></li>
+        <li><a href="#">
           <i class="fas fa-database"></i>
           <span class="nav-item">Report</span>
         </a></li>
@@ -315,7 +326,7 @@ table thead tr{
           <i class="fas fa-chart-bar"></i>
           <span class="nav-item">Attendance</span>
         </a></li>
-        <li><a href="setting.html">
+        <li><a href="#">
           <i class="fas fa-cog"></i>
           <span class="nav-item">Setting</span>
         </a></li>
@@ -329,49 +340,47 @@ table thead tr{
 
 
     <section class="main">
+ 
       <div class="main-top">
-        <h1>Attendance</h1>
+        <h1>Dashboard</h1>
         <i class="fas fa-user-cog"></i>
       </div>
-      
-      <div class="users">
-        <?php
-      $host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'pacifique';
+      <?php 
 
-$connection = mysqli_connect($host, $user, $password, $database);
+      while($row = mysqli_fetch_array($all_data)){
 
-if (!$connection) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-$query = "SELECT fullname, username, email, department FROM employees";
-
-$result = mysqli_query($connection, $query);
-
-if (!$result) {
-    die('Query failed: ' . mysqli_error($connection));
-}      
-        while ($row = mysqli_fetch_assoc($result)) {
-          echo'<div class="card">';
-          echo'<img src="./images/admin.jpeg">';
-           echo '<h4>' . $row['username'] . '</h4>';
-           echo '<p>' . $row['department'] . '</p>';
-          
-          echo'<button id="profile" onclick="openPopup();">Profile</button>';
-        echo'</div>';
-      }
-      
-      
-      // Close the database connection
-      mysqli_close($connection);
       ?>
-      
+      <div class="users">
+        <div class="card">
+          <img src="./images/photo.png">
+          <h4><?php echo $row["username"] ?></h4>
+          <p><?php echo $row["department"] ?></p>
+          <div class="per">
+            <table>
+              <tr>
+                <td><span>85%</span></td>
+                <td><span>87%</span></td>
+              </tr>
+              <tr>
+                <td>Month</td>
+                <td>Year</td>
+              </tr>
+            </table>
+          </div>
+          <button onclick="openPopup();">Profile</button>
+        </div>
 
-       
-          <?php
+      </div>
+      
+      <?php
+      }
+      ?>
+      <div class="popup" id="popup">
+          <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
+          <div class="container-pop">
+         
+         
+         <?php
       $host = 'localhost';
 $user = 'root';
 $password = '';
@@ -383,25 +392,18 @@ if (!$connection) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-$query = "SELECT fullname, username, email, department FROM employees";
 
-$result = mysqli_query($connection, $query);
 
-if (!$result) {
+  $query = "SELECT username, fullname, email, department FROM employees";
+
+  $result = mysqli_query($connection, $query);
+
+  if (!$result) {
     die('Query failed: ' . mysqli_error($connection));
-}    
-
-
-
-
-
-
+  }
 
         while ($row = mysqli_fetch_assoc($result)) {
-          echo'<div class="popup" id="popup">';
-          echo'<h1 style="text-align: center; padding: 10px;">PROFILE</h1>';
-
-          echo'<div class="container-pop">';
+          
             echo'<div class="picture"><img src="./images/photo.png" width="200px" height="250px" alt=""></div>';
             echo'<div class="info">';
             echo'<table>';
@@ -409,74 +411,102 @@ if (!$result) {
                   echo'<td>';echo' <p>Fullname:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['fullname']. '</span>';echo'</td>';echo'</tr>';
               echo'<tr>';
               echo'<td>';echo'<p>Username:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['username']. '</span>';echo'</td>';echo'</tr>';
-             echo'<tr>';
-             echo'<td>';echo'<p>Email:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
-             echo'</tr>';
+              echo'<td>';echo'<p>Email:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
               echo'<td>';echo'<p>Department:</p>';echo'</td>';echo'<td>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
              
              echo'</tr>';
              echo'</table>';
       
-              
+              echo'<div class="percentage">';
+                echo'<table>';
+                  echo'<tr>';
+                  echo'<td>Month</td>';
+                    echo'<td>Year</td>';
+                    
+                  echo'</tr>';
+                  echo'<tr>';
+                  echo'<td><span>85%</span></td>';
+                    echo'<td><span>87%</span></td>';
+                  echo'</tr>';
+                echo'</table>';
+                echo'</div>';
               echo'</div>';
-              echo'</div>';
-              echo'</div>';
+             
             }
-            
  mysqli_close($connection);
       ?>
-        <div id="backgroundOverlay" onclick="closePopup();"></div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Alliance</h4>
-          <p>tester</p>
-          
-          <button>Profile</button>
-        </div>
-        <div class="card">
-          <img src="./images/admin.jpeg">
-          <h4>Faustin</h4>
-          <p>Ui designer</p>
-          
-          <button>Profile</button>
-        </div>
+
+      </div>
       </div>
 
-      <section class="attendance">
-        <div class="attendance-list">
-          <h1>Attendance List</h1>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Depart</th>
-                <th>Date</th>
-                <th>Join Time</th>
-                <th>Logout Time</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody id="">
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><button id="view-btn" onclick="view_btn()">View</button></td>
-              </tr>
-            </tbody>
-          </table>
+      <?php
+
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'pacifique';
+
+$connection = mysqli_connect($host, $user, $password, $database);
+
+if (!$connection) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+          FROM employees
+          INNER JOIN attendance ON employees.username = attendance.username";
+
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    die('Query failed: ' . mysqli_error($connection));
+}
+
+// Start the attendance table body
+echo '<table class="table">';
+echo '<thead>';
+echo '<tr>';
+echo '<th id="user">Username</th>';
+echo '<th>Email</th>';
+echo '<th>Department</th>';
+echo '<th>Date</th>';
+echo '<th>Join Time</th>';
+echo '<th>Logout Time</th>';
+echo '<th>Details</th>';
+echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+
+// Fetch data from the result set
+while ($row = mysqli_fetch_assoc($result)) {
+    echo '<tr>';
+    echo '<td>' . $row['username'] . '</td>';
+    echo '<td>' . $row['email'] . '</td>';
+    echo '<td>' . $row['department'] . '</td>';
+    echo '<td>' . $row['date'] . '</td>';
+    echo '<td>' . $row['join_time'] . '</td>';
+    echo '<td>' . $row['logout_time'] . '</td>';
+    echo'<td><button onclick="openPopup();">View</button></td>';
+    echo '</tr>';
+}
+
+// End the attendance table body
+echo '</tbody>';
+echo '</table>';
+
+
+// Close the database connection
+mysqli_close($connection);
+?>
         </div>
       </section>
+   
     </section>
+      
+    
   </div>
-<!-- <div class="footer">&copy; 2023</div> -->
-
-<script>
-  
+  <div id="backgroundOverlay" onclick="closePopup();"></div>
+  <script>
   
   const backgroundOverlay = document.getElementById("backgroundOverlay");
   let popup = document.getElementById('popup');
@@ -490,11 +520,6 @@ function closePopup() {
   popup.style.display = "none";
   backgroundOverlay.style.display = "none";
 }
-
-function view_btn(){
-  window.location.href = "attend.php";
-}
 </script>
-
 </body>
 </html>
