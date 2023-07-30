@@ -365,7 +365,10 @@ if (!$connection) {
 
 
 
-  $query = "SELECT username, fullname, email, department FROM employees";
+ 
+$query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+FROM employees
+INNER JOIN attendance ON employees.username = attendance.username";
 
   $result = mysqli_query($connection, $query);
 
@@ -424,7 +427,7 @@ if (!$connection) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+$query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
           FROM employees
           INNER JOIN attendance ON employees.username = attendance.username";
 
@@ -438,6 +441,7 @@ if (!$result) {
 echo '<table class="table">';
 echo '<thead>';
 echo '<tr>';
+echo '<th>ID</th>';
 echo '<th id="user">Username</th>';
 echo '<th>Email</th>';
 echo '<th>Department</th>';
@@ -452,6 +456,7 @@ echo '<tbody>';
 // Fetch data from the result set
 while ($row = mysqli_fetch_assoc($result)) {
     echo '<tr>';
+    echo '<td>' . $row['id'] . '</td>';
     echo '<td>' . $row['username'] . '</td>';
     echo '<td>' . $row['email'] . '</td>';
     echo '<td>' . $row['department'] . '</td>';
@@ -467,7 +472,7 @@ echo '</tbody>';
 
 echo '</table>';
 
-echo'<button style="padding: 10px 20px; border-radius:5px; margin-left: 500px; cursor:pointer; border: 1px solid black;">Save</button>';
+echo'<button style="padding: 10px 20px; border-radius:5px; margin-left: 500px; cursor:pointer; border: 1px solid #4AD489;">Save</button>';
 // Close the database connection
 mysqli_close($connection);
 ?>

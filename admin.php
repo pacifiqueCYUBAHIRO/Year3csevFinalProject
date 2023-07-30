@@ -120,13 +120,15 @@ a:hover i{
   color: rgb(110, 109, 109);
   cursor: pointer;
 }
+
 .main .users{
-  display: flex;
-  width: 100%;
+  display: inline;
+
+
 }
 .users .card{
   display: inline-block;
-  width: 25%;
+  width: 23%;
   margin: 10px;
   background: #fff;
   text-align: center;
@@ -233,7 +235,6 @@ table thead tr{
   transition: 0.5rem;
 }
 
-
 .popup{
   width: 50%;
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
@@ -245,8 +246,6 @@ table thead tr{
   cursor: pointer;
   z-index: 9999;
   display: none;
-
-
 }
 #backgroundOverlay {
   position: fixed;
@@ -350,12 +349,13 @@ table thead tr{
       while($row = mysqli_fetch_array($all_data)){
 
       ?>
+
       <div class="users">
         <div class="card">
           <img src="./images/photo.png">
           <h4><?php echo $row["username"] ?></h4>
           <p><?php echo $row["department"] ?></p>
-          <div class="per">
+          <!-- <div class="per">
             <table>
               <tr>
                 <td><span>85%</span></td>
@@ -366,11 +366,12 @@ table thead tr{
                 <td>Year</td>
               </tr>
             </table>
-          </div>
+          </div> -->
           <button onclick="openPopup();">Profile</button>
         </div>
 
       </div>
+      
       
       <?php
       }
@@ -452,7 +453,7 @@ if (!$connection) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-$query = "SELECT attendance.username, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+$query = "SELECT attendance.username, employees.fullname, attendance.id, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
           FROM employees
           INNER JOIN attendance ON employees.username = attendance.username";
 
@@ -466,13 +467,14 @@ if (!$result) {
 echo '<table class="table">';
 echo '<thead>';
 echo '<tr>';
+echo '<th>ID</th>';
 echo '<th id="user">Username</th>';
 echo '<th>Email</th>';
 echo '<th>Department</th>';
 echo '<th>Date</th>';
 echo '<th>Join Time</th>';
 echo '<th>Logout Time</th>';
-echo '<th>Details</th>';
+
 echo '</tr>';
 echo '</thead>';
 echo '<tbody>';
@@ -480,13 +482,14 @@ echo '<tbody>';
 // Fetch data from the result set
 while ($row = mysqli_fetch_assoc($result)) {
     echo '<tr>';
+    echo '<td>' . $row['id'] . '</td>';
     echo '<td>' . $row['username'] . '</td>';
     echo '<td>' . $row['email'] . '</td>';
     echo '<td>' . $row['department'] . '</td>';
     echo '<td>' . $row['date'] . '</td>';
     echo '<td>' . $row['join_time'] . '</td>';
     echo '<td>' . $row['logout_time'] . '</td>';
-    echo'<td><button onclick="openPopup();">View</button></td>';
+ 
     echo '</tr>';
 }
 
