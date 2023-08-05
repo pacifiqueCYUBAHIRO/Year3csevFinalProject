@@ -91,7 +91,7 @@ a:hover{
   background: #eee;
 }
 a:hover i{
-  color: #34AF6D;
+  color: #0b5885;
   transition: 0.5s;
 }
 .logout{
@@ -168,10 +168,10 @@ a:hover i{
   cursor: pointer;
   border-radius: 10px;
   background: transparent;
-  border: 1px solid #4AD489;
+  border: 1px solid #0b5885;
 }
 .users .card button:hover{
-  background: #4AD489;
+  background: #0b5885;
   color: #fff;
   transition: 0.5s;
 }
@@ -199,8 +199,8 @@ a:hover i{
 }
 table thead tr{
   color: #fff;
-  background: #34AF6D;
-  border: 2px solid #34AF6D;
+  background: #0b5885;
+  border: 2px solid #0b5885;
   text-align: left;
   font-weight: bold;
 }
@@ -215,7 +215,7 @@ table thead tr{
   background: #f3f3f3;
 }
 .table tbody tr:last-of-type{
-  border-bottom: 2px solid #4AD489;
+  border-bottom: 2px solid #0b5885;
 }
 .table tbody tr{
   border-left: 1px solid #fff;
@@ -227,10 +227,10 @@ table thead tr{
   border-radius: 10px;
   cursor: pointer;
   background: transparent;
-  border: 1px solid #4AD489;
+  border: 1px solid #0b5885;
 }
 .table button:hover{
-  background: #4AD489;
+  background: #0b5885;
   color: #fff;
   transition: 0.5rem;
 }
@@ -317,7 +317,7 @@ table thead tr{
           <i class="fas fa-comment"></i>
           <span class="nav-item">Message</span>
         </a></li>
-        <li><a href="#">
+        <li><a href="report.html">
           <i class="fas fa-database"></i>
           <span class="nav-item">Report</span>
         </a></li>
@@ -340,49 +340,49 @@ table thead tr{
 
     <section class="main">
  
-      <div class="main-top">
-        <h1>Dashboard</h1>
-        <i class="fas fa-user-cog"></i>
-      </div>
-      <?php 
+ <div class="main-top">
+   <h1>Dashboard</h1>
+   <i class="fas fa-user-cog"></i>
+ </div>
+ <?php 
 
-      while($row = mysqli_fetch_array($all_data)){
+ while($row = mysqli_fetch_array($all_data)){
 
-      ?>
+ ?>
 
-      <div class="users">
-        <div class="card">
-          <img src="./images/photo.png">
-          <h4><?php echo $row["username"] ?></h4>
-          <p><?php echo $row["department"] ?></p>
-          <!-- <div class="per">
-            <table>
-              <tr>
-                <td><span>85%</span></td>
-                <td><span>87%</span></td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>Year</td>
-              </tr>
-            </table>
-          </div> -->
-          <button onclick="openPopup();">Profile</button>
-        </div>
+ <div class="users">
+   <div class="card">
+     <img src="./images/photo.png">
+     <h4><?php echo $row["username"] ?></h4>
+     <p><?php echo $row["department"] ?></p>
+     <div class="per">
+       <table>
+         <tr>
+           <td><span>85%</span></td>
+           <td><span>87%</span></td>
+         </tr>
+         <tr>
+           <td>Month</td>
+           <td>Year</td>
+         </tr>
+       </table>
+     </div>
+     <button onclick="openPopup();">Profile</button>
+   </div>
 
-      </div>
-      
-      
-      <?php
-      }
-      ?>
-      <div class="popup" id="popup">
-          <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
-          <div class="container-pop">
-         
-         
-         <?php
-      $host = 'localhost';
+ </div>
+ 
+ 
+ <?php
+ }
+ ?>
+ <div class="popup" id="popup">
+     <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
+     <div class="container-pop">
+    
+    
+    <?php
+ $host = 'localhost';
 $user = 'root';
 $password = '';
 $database = 'pacifique';
@@ -390,53 +390,52 @@ $database = 'pacifique';
 $connection = mysqli_connect($host, $user, $password, $database);
 
 if (!$connection) {
-    die('Connection failed: ' . mysqli_connect_error());
+die('Connection failed: ' . mysqli_connect_error());
 }
 
 
 
-  $query = "SELECT username, fullname, email, department FROM employees";
+$query = "SELECT username, fullname, email, department FROM employees";
 
-  $result = mysqli_query($connection, $query);
+$result = mysqli_query($connection, $query);
 
-  if (!$result) {
-    die('Query failed: ' . mysqli_error($connection));
-  }
+if (!$result) {
+die('Query failed: ' . mysqli_error($connection));
+}
 
-        while ($row = mysqli_fetch_assoc($result)) {
-          
-            echo'<div class="picture"><img src="./images/photo.png" width="200px" height="250px" alt=""></div>';
-            echo'<div class="info">';
-            echo'<table>';
-                  echo'<tr>';
-                  echo'<td>';echo' <p>Fullname:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['fullname']. '</span>';echo'</td>';echo'</tr>';
-              echo'<tr>';
-              echo'<td>';echo'<p>Username:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['username']. '</span>';echo'</td>';echo'</tr>';
-              echo'<td>';echo'<p>Email:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
-              echo'<td>';echo'<p>Department:</p>';echo'</td>';echo'<td>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
-             
+   while ($row = mysqli_fetch_assoc($result)) {
+     
+       echo'<div class="picture"><img src="./images/photo.png" width="200px" height="250px" alt=""></div>';
+       echo'<div class="info">';
+       echo'<table>';
+             echo'<tr>';
+             echo'<td>';echo' <p>Fullname:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['fullname']. '</span>';echo'</td>';echo'</tr>';
+         echo'<tr>';
+         echo'<td>';echo'<p>Username:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['username']. '</span>';echo'</td>';echo'</tr>';
+         echo'<td>';echo'<p>Email:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
+         echo'<td>';echo'<p>Department:</p>';echo'</td>';echo'<td>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
+        
+        echo'</tr>';
+        echo'</table>';
+ 
+         echo'<div class="percentage">';
+           echo'<table>';
+             echo'<tr>';
+             echo'<td>Month</td>';
+               echo'<td>Year</td>';
+               
              echo'</tr>';
-             echo'</table>';
-      
-              echo'<div class="percentage">';
-                echo'<table>';
-                  echo'<tr>';
-                  echo'<td>Month</td>';
-                    echo'<td>Year</td>';
-                    
-                  echo'</tr>';
-                  echo'<tr>';
-                  echo'<td><span>85%</span></td>';
-                    echo'<td><span>87%</span></td>';
-                  echo'</tr>';
-                echo'</table>';
-                echo'</div>';
-              echo'</div>';
-             
-            }
- mysqli_close($connection);
-      ?>
-
+             echo'<tr>';
+             echo'<td><span>85%</span></td>';
+               echo'<td><span>87%</span></td>';
+             echo'</tr>';
+           echo'</table>';
+           echo'</div>';
+         echo'</div>';
+        
+       }
+mysqli_close($connection);
+ ?>
       </div>
       </div>
 

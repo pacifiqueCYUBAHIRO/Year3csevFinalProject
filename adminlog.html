@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://kit.fontawesome.com/03d0a7c683.js" crossorigin="anonymous"></script>
     <title>Signup/Login</title>
     <style>
       body{
@@ -33,13 +34,19 @@
       color: white;
       text-decoration: none;
       padding: 10px;
+      margin: 0 15px;
      }
 
         nav a:hover {
          
             color: yellowgreen;
-           
+            
           }  
+          
+          /* Style the active link */
+          .active {
+            background-color: #4CAF50;
+          }
           
           .main{
             display: flex;
@@ -52,45 +59,54 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: rgb(1, 13, 44);
-        border-top-right-radius: 100%;
-        border-bottom-right-radius: 100%;
-        width: 50%;
+        
+      
+        width: 100%;
         
       }
 
-      /* Style for the form container */
-      .form-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+     
+      .login-container {
         background-color: #fff;
         padding: 20px;
-        border: 1px solid #ccc;
         border-radius: 5px;
-        box-shadow: 0px 0px 5px #ccc;
-        
-      }
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        width: 100%;
+    }
 
-      /* Style for the form input fields */
-      input[type="text"], input[type="password"] {
+    .login-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
         padding: 10px;
-        margin: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        width: 90%;
-      }
+    }
 
-      /* Style for the form submit button */
-      input[type="submit"] {
-        background-color: #4CAF50;
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+        width: 95%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .form-group button {
+      background: #0b5885;
         color: white;
         padding: 10px 20px;
         border: none;
-        margin: 10px;
         border-radius: 5px;
         cursor: pointer;
-      }
+        width: 100%;
+    }
 
       /* Style for the form header */
       h2 {
@@ -112,17 +128,7 @@
         padding: 20px;
 
     }
-    @media screen and (max-width: 850px) {
-      .container {
-        
-        display: flex;
-        flex-direction: column;
-        
-        
-       
-      }
-      
-    }
+  
 
     </style>
   </head>
@@ -133,26 +139,36 @@
       <ul>
         <li>
           <a href="index.html">Home</a>
+          <a href="adminlog.html" style="background-color: #0b5885;  text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
         </li>
       </ul>
     </nav>
-    <div class="main">
+
     <div class="container">
 
-      <!-- Login form -->
-      <div class="form-container">
-        <h2>Admin Log In</h2>
-        <form action="admin1.php" method="POST">
-          <input type="text" placeholder="Username" name="username">
-          <input type="password" placeholder="Password" name="password">
-          <input type="submit" value="Log in">
-        </form>
-        <p>Don't have an account? <a href="register.html">Sign up</a></p>
-      </div>
-    </div>
-   
+    <div class="login-container">
+      <h2>Admin</h2>
+      <form action="admin1.php" method="post">
+          <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required>
+          </div>
+          <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+          </div>
+          <div class="form-group">
+              <button type="submit">Login</button>
+          </div>
+          <center><p style="font-size: 14px;">Don't have an account? <a href="register.html">Sign Up</a></p></center>
+      </form>
   </div>
+
+</div>
+
     <div class="footer">&COPY; 2023</div>
+
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=17cdf8cd-def1-4157-a6da-f19c801ef92e"> </script>
   </body>
   <script>
     (function(d, w, c) {

@@ -91,7 +91,7 @@ a:hover{
   background: #eee;
 }
 a:hover i{
-  color: #34AF6D;
+  color: #0b5885;
   transition: 0.5s;
 }
 .logout{
@@ -164,10 +164,10 @@ a:hover i{
   cursor: pointer;
   border-radius: 10px;
   background: transparent;
-  border: 1px solid #4AD489;
+  border: 1px solid #0b5885;
 }
 .users .card button:hover{
-  background: #4AD489;
+  background: #0b5885;
   color: #fff;
   transition: 0.5s;
 }
@@ -196,8 +196,8 @@ a:hover i{
 }
 table thead tr{
   color: #fff;
-  background: #34AF6D;
-  border: 2px solid #34AF6D;
+  background: #0b5885;
+  border: 2px solid #0b5885;
   text-align: left;
   font-weight: bold;
 }
@@ -212,7 +212,7 @@ table thead tr{
   background: #f3f3f3;
 }
 .table tbody tr:last-of-type{
-  border-bottom: 2px solid #4AD489;
+  border-bottom: 2px solid #0b5885;
 
 }
 .table tbody tr{
@@ -225,10 +225,10 @@ table thead tr{
   border-radius: 10px;
   cursor: pointer;
   background: transparent;
-  border: 1px solid #4AD489;
+  border: 1px solid #0b5885;
 }
 .table button:hover{
-  background: #4AD489;
+  background: #0b5885;
   color: #fff;
   transition: 0.5rem;
 }
@@ -295,6 +295,10 @@ table thead tr{
 .percentage td span{
   font-weight: 200;
 }
+.btn:hover{
+background: #0b5885;  
+color: white;
+}
 
   </style>
 
@@ -318,7 +322,7 @@ table thead tr{
           <i class="fas fa-comment"></i>
           <span class="nav-item">Message</span>
         </a></li>
-        <li><a href="#">
+        <li><a href="report.html">
           <i class="fas fa-database"></i>
           <span class="nav-item">Report</span>
         </a></li>
@@ -472,7 +476,7 @@ echo '</tbody>';
 
 echo '</table>';
 
-echo'<button style="padding: 10px 20px; border-radius:5px; margin-left: 500px; cursor:pointer; border: 1px solid #4AD489;">Save</button>';
+echo'<button class="btn" style="padding: 10px 20px; border-radius:5px; margin-left: 500px; cursor:pointer; border: 1px solid #0b5885;">Save</button>';
 // Close the database connection
 mysqli_close($connection);
 ?>
