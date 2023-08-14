@@ -48,21 +48,13 @@
             background-color: #4CAF50;
           }
           
-          .main{
-            display: flex;
-            flex-direction: row;
-            background-image: url(./images/02.jpg);
-            background-size: cover;
-          }
-      .container {
+      .main {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        
-      
-        width: 100%;
-        
+        padding: 20px;
+         
       }
 
      
@@ -73,6 +65,7 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         max-width: 400px;
         width: 100%;
+        height: 300px;
     }
 
     .login-container h2 {
@@ -129,6 +122,7 @@
 
     }
   
+    
 
     </style>
   </head>
@@ -139,12 +133,12 @@
       <ul>
         <li>
           <a href="index.html">Home</a>
-          <a href="adminlog.html" style="background-color: #0b5885;  text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
+          <a href="adminlog.html" class="active" style="background-color: #0b5885;  text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
         </li>
       </ul>
     </nav>
 
-    <div class="container">
+    <div class="main">
 
     <div class="login-container">
       <h2>Admin</h2>
@@ -168,7 +162,6 @@
 
     <div class="footer">&COPY; 2023</div>
 
-    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=17cdf8cd-def1-4157-a6da-f19c801ef92e"> </script>
   </body>
   <script>
     (function(d, w, c) {

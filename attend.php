@@ -459,17 +459,18 @@ echo '<tbody>';
 
 // Fetch data from the result set
 while ($row = mysqli_fetch_assoc($result)) {
-    echo '<tr>';
-    echo '<td>' . $row['id'] . '</td>';
-    echo '<td>' . $row['username'] . '</td>';
-    echo '<td>' . $row['email'] . '</td>';
-    echo '<td>' . $row['department'] . '</td>';
-    echo '<td>' . $row['date'] . '</td>';
-    echo '<td>' . $row['join_time'] . '</td>';
-    echo '<td>' . $row['logout_time'] . '</td>';
-    echo'<td><button onclick="openPopup();">View</button></td>';
-    echo '</tr>';
+  echo '<tr>';
+  echo '<td>' . $row['id'] . '</td>';
+  echo '<td><a href="employee_details.php?username=' . $row['username'] . '">' . $row['username'] . '</a></td>';
+  echo '<td>' . $row['email'] . '</td>';
+  echo '<td>' . $row['department'] . '</td>';
+  echo '<td>' . $row['date'] . '</td>';
+  echo '<td>' . $row['join_time'] . '</td>';
+  echo '<td>' . $row['logout_time'] . '</td>';
+  echo '<td><button onclick="openPopup();">View</button></td>';
+  echo '</tr>';
 }
+
 
 // End the attendance table body
 echo '</tbody>';

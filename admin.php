@@ -367,7 +367,10 @@ table thead tr{
          </tr>
        </table>
      </div>
+
+    
      <button onclick="openPopup();">Profile</button>
+     <button onclick="openAction();">action</button>
    </div>
 
  </div>
@@ -380,6 +383,9 @@ table thead tr{
      <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
      <div class="container-pop">
     
+
+
+
     
     <?php
  $host = 'localhost';
@@ -502,8 +508,6 @@ mysqli_close($connection);
 ?>
         </div>
       </section>
-   
-    </section>
       
     
   </div>
@@ -521,6 +525,10 @@ function closePopup() {
   popup.classList.remove("open-popup");
   popup.style.display = "none";
   backgroundOverlay.style.display = "none";
+}
+
+function openAction() {
+  window.location = ('setting.php');
 }
 </script>
 </body>
