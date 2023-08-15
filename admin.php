@@ -313,7 +313,7 @@ table thead tr{
           <i class="fas fa-menorah"></i>
           <span class="nav-item">Dashboard</span>
         </a></li>
-        <li><a href="#">
+        <li><a href="https://app.chatra.io/conversations/mychat" target="_blank">
           <i class="fas fa-comment"></i>
           <span class="nav-item">Message</span>
         </a></li>
@@ -325,7 +325,7 @@ table thead tr{
           <i class="fas fa-chart-bar"></i>
           <span class="nav-item">Attendance</span>
         </a></li>
-        <li><a href="#">
+        <li><a href="setting.php">
           <i class="fas fa-cog"></i>
           <span class="nav-item">Setting</span>
         </a></li>
@@ -344,42 +344,65 @@ table thead tr{
    <h1>Dashboard</h1>
    <i class="fas fa-user-cog"></i>
  </div>
- <?php 
-
- while($row = mysqli_fetch_array($all_data)){
-
- ?>
-
- <div class="users">
-   <div class="card">
-     <img src="./images/photo.png">
-     <h4><?php echo $row["username"] ?></h4>
-     <p><?php echo $row["department"] ?></p>
-     <div class="per">
-       <table>
-         <tr>
-           <td><span>85%</span></td>
-           <td><span>87%</span></td>
-         </tr>
-         <tr>
-           <td>Month</td>
-           <td>Year</td>
-         </tr>
-       </table>
-     </div>
-
-    
-     <button onclick="openPopup();">Profile</button>
-     <button onclick="openAction();">action</button>
-   </div>
-
- </div>
- 
- 
  <?php
- }
- ?>
- <div class="popup" id="popup">
+      function calculatePercentage($attendanceCount, $totalDays) {
+        $percentage = ($attendanceCount / $totalDays) * 100;
+        return number_format($percentage, 2); // Format as a two-decimal percentage
+      }
+      
+      $attendanceData = array(); // Initialize the array
+      
+      // Fetch the attendance data and populate $attendanceData
+      $host = 'localhost';
+      $user = 'root';
+      $password = '';
+      $database = 'pacifique';
+      
+      $connection = mysqli_connect($host, $user, $password, $database);
+      
+      if (!$connection) {
+          die('Connection failed: ' . mysqli_connect_error());
+      }
+      
+      $query = "SELECT attendance.username, COUNT(*) as total_attendance
+                FROM attendance
+                GROUP BY attendance.username";
+      
+      $result = mysqli_query($connection, $query);
+      
+      if ($result) {
+          while ($row = mysqli_fetch_assoc($result)) {
+              $attendanceData[$row['username']] = $row['total_attendance'];
+          }
+      }
+      
+      mysqli_close($connection);
+      
+      while ($row = mysqli_fetch_assoc($all_data)) {
+        echo '<div class="users">';
+        echo '<div class="card">';
+        echo '<img src="./images/photo.png">';
+        echo '<h4>' . $row["username"] . '</h4>';
+        echo '<p>' . $row["department"] . '</p>';
+        echo '<div class="per">';
+        echo '<table>';
+        echo '<tr>';
+        echo '<td><span>' . calculatePercentage($attendanceData[$row['username']] ?? 0, 20) . '%</span></td>';
+        echo '<td><span>' . calculatePercentage($attendanceData[$row['username']] ?? 0, 240) . '%</span></td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>Month</td>';
+        echo '<td>Year</td>';
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+        echo '<button onclick="openPopup();" >Profile</button>';
+        echo '<button onclick="openAction();">action</button>';
+        echo '</div>';
+        echo '</div>';
+      }
+      ?>
+       <div class="popup" id="popup">
      <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
      <div class="container-pop">
     
@@ -432,8 +455,8 @@ die('Query failed: ' . mysqli_error($connection));
                
              echo'</tr>';
              echo'<tr>';
-             echo'<td><span>85%</span></td>';
-               echo'<td><span>87%</span></td>';
+             echo '<td><span>' . calculatePercentage($attendanceData[$row['username']] ?? 0, 20) . '%</span></td>';
+        echo '<td><span>' . calculatePercentage($attendanceData[$row['username']] ?? 0, 240) . '%</span></td>';
              echo'</tr>';
            echo'</table>';
            echo'</div>';

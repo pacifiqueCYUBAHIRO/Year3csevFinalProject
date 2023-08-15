@@ -177,7 +177,7 @@ a:hover i{
           <i class="fas fa-chart-bar"></i>
           <span class="nav-item">Attendance</span>
         </a></li>
-        <li><a href="setting.html">
+        <li><a href="setting.php">
           <i class="fas fa-cog"></i>
           <span class="nav-item">Setting</span>
         </a></li>
@@ -196,20 +196,12 @@ a:hover i{
         <h1>Settings</h1>
         <i class="fas fa-user-cog"></i>
       </div>
-<div style="display: flex; justify-content: center; align-items: center;">
+      <br><br>
+<div style="display: flex; justify-content: center; align-items: center; padding: 20px;">
     <form method="POST">
       <h2>Edit Employee</h2>
-      <select name="selected_employee" id="selected_employee">
-        <option value="">Select an employee</option>
-        <?php
-        $select_query = "SELECT username, fullname FROM employees";
-        $result = mysqli_query($conn, $select_query);
-        
-        while ($row = mysqli_fetch_assoc($result)) {
-          echo "<option value='{$row['username']}'>{$row['fullname']}</option>";
-        }
-        ?>
-      <input type="text" id="edit_username" name="username" placeholder="Your Username">
+      
+      <input type="text" id="edit_username" name="username" placeholder="Rewrite_username" />
       <input type="text" id="edit_fullname" name="fullname" placeholder="New Full Name">
       <input type="email" id="edit_email" name="email" placeholder="New Email">
       <input type="text" id="edit_department" name="department" placeholder="Change Department"> <br>
@@ -260,23 +252,7 @@ a:hover i{
   
        ?>
 
-<?php
-if (isset($_GET["username"])) {
-  $selectedUsername = $_GET["username"];
-  
-  $select_query = "SELECT * FROM employees WHERE username=?";
-  $stmt = $conn->prepare($select_query);
-  $stmt->bind_param("s", $selectedUsername);
-  $stmt->execute();
-  
-  $result = $stmt->get_result();
-  $employeeData = $result->fetch_assoc();
-  
-  echo json_encode($employeeData);
-} else {
-  echo json_encode(array());
-}
-?>
+
 
 </div>
     </section>

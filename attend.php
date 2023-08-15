@@ -318,7 +318,7 @@ color: white;
           <i class="fas fa-menorah"></i>
           <span class="nav-item">Dashboard</span>
         </a></li>
-        <li><a href="#">
+        <li><a href="https://app.chatra.io/conversations/mychat">
           <i class="fas fa-comment"></i>
           <span class="nav-item">Message</span>
         </a></li>
@@ -330,7 +330,7 @@ color: white;
           <i class="fas fa-chart-bar"></i>
           <span class="nav-item">Attendance</span>
         </a></li>
-        <li><a href="#">
+        <li><a href="setting.php">
           <i class="fas fa-cog"></i>
           <span class="nav-item">Setting</span>
         </a></li>
