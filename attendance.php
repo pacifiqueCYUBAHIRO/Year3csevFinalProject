@@ -244,6 +244,17 @@ capture.addEventListener("click",function(){
     context.drawImage(video,0,20,330,115);
 });
 </script>
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=17cdf8cd-def1-4157-a6da-f19c801ef92e"> </script>
+<script>
+    (function(d, w, c) {
+        w.ChatraID = 'njhpenbXDBbbEaETE';
+        var s = d.createElement('script');
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        s.async = true;
+        s.src = 'https://call.chatra.io/chatra.js';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'Chatra');
+</script>
 </body>
 </html>

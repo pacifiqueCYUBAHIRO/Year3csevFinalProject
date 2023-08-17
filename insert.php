@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     // Decode the image data
-    $decodedImageData = base64_decode($imageData);
+    $decodedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
 
     // Establish a MySQL connection
     $mysqli = new mysqli('localhost', 'root', '', 'pacifique');
@@ -23,12 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
     $mysqli->close();
 
+
+    $uploadPath = 'uploads/' . $username . '.jpg'; // Change the extension if needed
+    file_put_contents($uploadPath, $decodedImageData);
     // Redirect the user or show a success message
     // header("Location: register.html");
 	echo '<script>
 	window.onload = function() {
 		alert("Data inserted successfully!");
-		window.location = "register.html";
+		window.location = "login.html";
 	};
 </script>';
     exit;

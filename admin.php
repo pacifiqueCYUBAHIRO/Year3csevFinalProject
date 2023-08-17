@@ -1,3 +1,7 @@
+<script>
+  let data = "Hello ";
+</script>
+
 <?php 
 $servername = "localhost";
 $username = "root";
@@ -7,7 +11,7 @@ $dbname = "pacifique";
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-$sql = "SELECT image_data, username, department from employees";
+$sql = "SELECT image_data, username, department, fullname, email, employee_id from employees";
 $all_data = $conn->query($sql);
 
 ?>
@@ -241,12 +245,14 @@ table thead tr{
   border-radius: 5px;
   background: #f3f3f3;
   position: fixed;
-  padding: 10px;
+  padding: 30px;
   left: 50%;
+  align-items: center;
   cursor: pointer;
   z-index: 9999;
   display: none;
 }
+
 #backgroundOverlay {
   position: fixed;
   top: 0;
@@ -268,8 +274,13 @@ table thead tr{
 .container-pop{
   display: flex;
   flex-direction: row;
+  justify-content: center;
   width: 100%;
 }
+.container-pop img{
+  margin-left: 0;
+}
+
 .picture{
   width: 50%;
   margin: 30px;
@@ -281,6 +292,7 @@ table thead tr{
   align-items: center;
   width: 50%;
   margin-top: 10px;
+  margin-left: 80px;
 }
 .info p{
   font-weight: bold;
@@ -317,7 +329,7 @@ table thead tr{
           <i class="fas fa-comment"></i>
           <span class="nav-item">Message</span>
         </a></li>
-        <li><a href="report.html">
+        <li><a href="report.php">
           <i class="fas fa-database"></i>
           <span class="nav-item">Report</span>
         </a></li>
@@ -376,12 +388,15 @@ table thead tr{
           }
       }
       
-      mysqli_close($connection);
-      
-      while ($row = mysqli_fetch_assoc($all_data)) {
+      mysqli_close($connection); ?>
+     
+      <?php
+      $data_array = array();
+      while ($row = mysqli_fetch_assoc($all_data)) { 
+        $data_array[] = $row;
         echo '<div class="users">';
         echo '<div class="card">';
-        echo '<img src="./images/photo.png">';
+        echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" />';
         echo '<h4>' . $row["username"] . '</h4>';
         echo '<p>' . $row["department"] . '</p>';
         echo '<div class="per">';
@@ -396,18 +411,37 @@ table thead tr{
         echo '</tr>';
         echo '</table>';
         echo '</div>';
-        echo '<button onclick="openPopup();" >Profile</button>';
+        echo '<button onclick="openPopup(' . $row["employee_id"] . ');">Profile</button>';
         echo '<button onclick="openAction();">action</button>';
         echo '</div>';
         echo '</div>';
       }
-      ?>
-       <div class="popup" id="popup">
-     <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
-     <div class="container-pop">
+
+      function encodeArray($array) {
+        foreach ($array as $index => $row) {
+            $array[$index] = array(
+                'username' => mb_check_encoding($row['username'], 'UTF-8') ? $row['username'] : utf8_encode($row['username']),
+                'department' => mb_check_encoding($row['department'], 'UTF-8') ? $row['department'] : utf8_encode($row['department']),
+                'fullname' => mb_check_encoding($row['fullname'], 'UTF-8') ? $row['fullname'] : utf8_encode($row['fullname']),
+                'employee_id' => mb_check_encoding($row['employee_id'], 'UTF-8') ? $row['employee_id'] : utf8_encode($row['employee_id']),
+                'image_data' => mb_check_encoding($row['image_data'], 'UTF-8') ? $row['image_data'] : utf8_encode($row['image_data']),
+                'email' => mb_check_encoding($row['email'], 'UTF-8') ? $row['email'] : utf8_encode($row['email']), // Add this line for email
+              );
+        }
+        return $array;
+    }
+
+    $json_data = json_encode(encodeArray($data_array));
+    ?>
+    <div class="popup" id="popup">
+      <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
+    <div class="container-pop">
     
 
-
+    <script>
+      var jsonData = <?php echo $json_data; ?>;
+      // console.log("All users ========>: ", jsonData);
+    </script>
 
     
     <?php
@@ -424,17 +458,21 @@ die('Connection failed: ' . mysqli_connect_error());
 
 
 
-$query = "SELECT username, fullname, email, department FROM employees";
+$query = "SELECT image_data, username, fullname, email, department FROM employees";
 
 $result = mysqli_query($connection, $query);
 
 if (!$result) {
 die('Query failed: ' . mysqli_error($connection));
 }
-
-   while ($row = mysqli_fetch_assoc($result)) {
-     
-       echo'<div class="picture"><img src="./images/photo.png" width="200px" height="250px" alt=""></div>';
+?>
+  <!-- while ($row = mysqli_fetch_assoc($result)) { -->
+  <!-- <script>
+    let selectedId = document.getElementById('select-id').value;;
+    for(let i = 0; i < jsonData.length; i++) {
+      if(jsonData[i] === selectedId) {
+        let data = ` -->
+       <!-- echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" />';
        echo'<div class="info">';
        echo'<table>';
              echo'<tr>';
@@ -461,8 +499,11 @@ die('Query failed: ' . mysqli_error($connection));
            echo'</table>';
            echo'</div>';
          echo'</div>';
-        
-       }
+      </script> -->
+      <!-- } -->
+
+
+<?php
 mysqli_close($connection);
  ?>
       </div>
@@ -532,17 +573,17 @@ mysqli_close($connection);
         </div>
       </section>
       
-    
-  </div>
   <div id="backgroundOverlay" onclick="closePopup();"></div>
   <script>
   
   const backgroundOverlay = document.getElementById("backgroundOverlay");
   let popup = document.getElementById('popup');
-function openPopup() {
+function openPopup(employeeId) {
+  showSelectProfile(employeeId);
   popup.classList.add("open-popup");
   popup.style.display = "block";
   backgroundOverlay.style.display = "block";
+
 }
 function closePopup() {
   popup.classList.remove("open-popup");
@@ -554,5 +595,75 @@ function openAction() {
   window.location = ('setting.php');
 }
 </script>
+
+
+<script>
+
+function calculatePercentage(attendanceCount, totalDays) {
+    let percentage = (attendanceCount / totalDays) * 100;
+    console.log("=======", attendanceCount);
+    return percentage.toFixed(2); // Format as a two-decimal percentage
+}
+
+
+function showSelectProfile(employeeId) {
+    for (let i = 0; i < jsonData.length; i++) {
+        if (parseInt(jsonData[i].employee_id) === parseInt(employeeId)) {
+            let attendanceData = jsonData[i].attendanceData; // Retrieve attendance data
+            let data = `
+                <img src="uploads/${jsonData[i].username}.jpg" />
+                <div class="info">
+                    <table>
+                        <tr>
+                            <td><p>Fullname:</p></td>
+                            <td><span>${jsonData[i].fullname}</span></td>
+                        </tr>
+                        <tr>
+                            <td><p>Username:</p></td>
+                            <td><span>${jsonData[i].username}</span></td>
+                        </tr>
+                        <tr>
+                            <td><p>Email:</p></td>
+                            <td><span>${jsonData[i].email}</span></td>
+                        </tr>
+                        <tr>
+                            <td><p>Department:</p></td>
+                            <td><span>${jsonData[i].department}</span></td>
+                        </tr>
+                    </table>
+                    <div class="percentage">
+                        <table>
+                            <tr>
+                                <td>Month</td>
+                                <td>Year</td>
+                            </tr>
+                            <tr>
+                                <td><span>${calculatePercentage(attendanceData, 20)}%</span></td>
+                                <td><span>${calculatePercentage(attendanceData, 240)}%</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                `;
+            document.querySelector('.container-pop').innerHTML = data;
+            break;
+  
+
+            // Render the dynamic data
+            // let container = document.createElement('div');
+            // container.className = 'users';
+          //  document.querySelector('.container-pop').innerHTML = data;
+            // document.body.appendChild(container);
+
+            // break; // Exit the loop after rendering the selected employee
+        }
+ 
+    }
+    
+  }
+
+
+</script>
+
 </body>
 </html>

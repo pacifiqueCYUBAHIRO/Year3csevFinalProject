@@ -233,68 +233,19 @@ table thead tr{
   transition: 0.5rem;
 }
 
-
-.popup{
-  width: 50%;
-  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
-  background: #f3f3f3;
-  position: fixed;
-  padding: 10px;
-  left: 50%;
-  cursor: pointer;
-  z-index: 9999;
-  display: none;
-
-
-}
-#backgroundOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  opacity: 0.7;
-  z-index: 9998;
-  display: none;
-}
-
-.open-popup{
-  visibility: visible;
-  top: 40%;
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-.container-pop{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
 .picture{
   width: 50%;
   margin: 30px;
 }
-.info{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  margin-top: 10px;
+
+.btn{
+  padding: 10px 20px;
+  border-radius:5px;
+  margin-left: 500px;
+  cursor:pointer;
+  border: 1px solid #0b5885;
 }
-.info p{
-  font-weight: bold;
-}
-.percentage td{
-  font-weight: bold;
-}
-.percentage table{
-  margin-top: 10px;
-}
-.percentage td span{
-  font-weight: 200;
-}
+
 .btn:hover{
 background: #0b5885;  
 color: white;
@@ -322,7 +273,7 @@ color: white;
           <i class="fas fa-comment"></i>
           <span class="nav-item">Message</span>
         </a></li>
-        <li><a href="report.html">
+        <li><a href="report.php">
           <i class="fas fa-database"></i>
           <span class="nav-item">Report</span>
         </a></li>
@@ -334,7 +285,6 @@ color: white;
           <i class="fas fa-cog"></i>
           <span class="nav-item">Setting</span>
         </a></li>
-
         <li><a href="logout.php" class="logout">
           <i class="fas fa-sign-out-alt"></i>
           <span class="nav-item">Log out</span>
@@ -342,88 +292,42 @@ color: white;
       </ul>
     </nav>
 
-
     <section class="main">
  
       <div class="main-top">
         <h1>Attendance</h1>
         <i class="fas fa-user-cog"></i>
       </div>
-      
-      <div class="popup" id="popup">
-          <h1 style="text-align: center; padding: 10px;">PROFILE</h1>
-          <div class="container-pop">
-         
-         
-         <?php
-      $host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'pacifique';
-
-$connection = mysqli_connect($host, $user, $password, $database);
-
-if (!$connection) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-
-
- 
-$query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
-FROM employees
-INNER JOIN attendance ON employees.username = attendance.username";
-
-  $result = mysqli_query($connection, $query);
-
-  if (!$result) {
-    die('Query failed: ' . mysqli_error($connection));
-  }
-
-        while ($row = mysqli_fetch_assoc($result)) {
-          
-            echo'<div class="picture"><img src="./images/photo.png" width="200px" height="250px" alt=""></div>';
-            echo'<div class="info">';
-            echo'<table>';
-                  echo'<tr>';
-                  echo'<td>';echo' <p>Fullname:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['fullname']. '</span>';echo'</td>';echo'</tr>';
-              echo'<tr>';
-              echo'<td>';echo'<p>Username:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['username']. '</span>';echo'</td>';echo'</tr>';
-              echo'<td>';echo'<p>Email:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
-              echo'<td>';echo'<p>Department:</p>';echo'</td>';echo'<td>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
-             
-             echo'</tr>';
-             echo'</table>';
-      
-              echo'<div class="percentage">';
-                echo'<table>';
-                  echo'<tr>';
-                  echo'<td>Month</td>';
-                    echo'<td>Year</td>';
-                    
-                  echo'</tr>';
-                  echo'<tr>';
-                  echo'<td><span>85%</span></td>';
-                    echo'<td><span>87%</span></td>';
-                  echo'</tr>';
-                echo'</table>';
-                
-                echo'</div>';
-              echo'</div>';
-             
-            }
- mysqli_close($connection);
-      ?>
-
-      </div>
-      </div>
-
+     
       <?php
 
 $host = 'localhost';
 $user = 'root';
 $password = '';
 $database = 'pacifique';
+
+if (isset($_POST['save'])) {
+  $connection = mysqli_connect($host, $user, $password, $database);
+
+  if (!$connection) {
+      die('Connection failed: ' . mysqli_connect_error());
+  }
+
+  $query = "INSERT INTO report (username, email, department, date, join_time, logout_time)
+            SELECT attendance.username, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+            FROM employees
+            INNER JOIN attendance ON employees.username = attendance.username";
+
+  $result = mysqli_query($connection, $query);
+
+  if ($result) {
+      echo "Attendance data saved successfully!";
+  } else {
+      echo "Error: " . mysqli_error($connection);
+  }
+
+  mysqli_close($connection);
+}
 
 $connection = mysqli_connect($host, $user, $password, $database);
 
@@ -440,6 +344,7 @@ $result = mysqli_query($connection, $query);
 if (!$result) {
     die('Query failed: ' . mysqli_error($connection));
 }
+echo'<form method="post">';
 
 // Start the attendance table body
 echo '<table class="table">';
@@ -452,7 +357,6 @@ echo '<th>Department</th>';
 echo '<th>Date</th>';
 echo '<th>Join Time</th>';
 echo '<th>Logout Time</th>';
-echo '<th>Details</th>';
 echo '</tr>';
 echo '</thead>';
 echo '<tbody>';
@@ -461,13 +365,12 @@ echo '<tbody>';
 while ($row = mysqli_fetch_assoc($result)) {
   echo '<tr>';
   echo '<td>' . $row['id'] . '</td>';
-  echo '<td><a href="employee_details.php?username=' . $row['username'] . '">' . $row['username'] . '</a></td>';
+  echo '<td>' . $row['username'] .'</td>';
   echo '<td>' . $row['email'] . '</td>';
   echo '<td>' . $row['department'] . '</td>';
   echo '<td>' . $row['date'] . '</td>';
   echo '<td>' . $row['join_time'] . '</td>';
   echo '<td>' . $row['logout_time'] . '</td>';
-  echo '<td><button onclick="openPopup();">View</button></td>';
   echo '</tr>';
 }
 
@@ -477,7 +380,12 @@ echo '</tbody>';
 
 echo '</table>';
 
-echo'<button class="btn" style="padding: 10px 20px; border-radius:5px; margin-left: 500px; cursor:pointer; border: 1px solid #0b5885;">Save</button>';
+
+    echo'<button class="btn" id="save_attendance" name="save">Save Daily Attendance</button>';
+echo'</form>';
+
+
+// echo'<button class="btn" id="save_attendance" name="save">Save Daily Attendance</button>';
 // Close the database connection
 mysqli_close($connection);
 ?>
@@ -489,21 +397,6 @@ mysqli_close($connection);
       
     
   </div>
-  <div id="backgroundOverlay" onclick="closePopup();"></div>
-  <script>
-  
-  const backgroundOverlay = document.getElementById("backgroundOverlay");
-  let popup = document.getElementById('popup');
-function openPopup() {
-  popup.classList.add("open-popup");
-  popup.style.display = "block";
-  backgroundOverlay.style.display = "block";
-}
-function closePopup() {
-  popup.classList.remove("open-popup");
-  popup.style.display = "none";
-  backgroundOverlay.style.display = "none";
-}
-</script>
+
 </body>
 </html>

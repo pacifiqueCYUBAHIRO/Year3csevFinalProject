@@ -153,6 +153,15 @@ a:hover i{
       color: #fff;
       margin-left: 10px;
     }
+
+    select{
+      width: 50%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
   </style>
   <!-- Font Awesome Cdn Link -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
@@ -201,26 +210,53 @@ a:hover i{
     <form method="POST">
       <h2>Edit Employee</h2>
       
-      <input type="text" id="edit_username" name="username" placeholder="Rewrite_username" />
-      <input type="text" id="edit_fullname" name="fullname" placeholder="New Full Name">
-      <input type="email" id="edit_email" name="email" placeholder="New Email">
-      <input type="text" id="edit_department" name="department" placeholder="Change Department"> <br>
-      <button type="submit" name="edit_employee">Edit</button>
+      <select id="edit_username" name="username">
+  <option value="" disabled selected>Select username</option>
+  <?php
+  // Fetch usernames from the database
+  $usernames_query = "SELECT username FROM employees";
+  $result = mysqli_query($conn, $usernames_query);
+
+  // Generate <option> elements
+  while ($row = mysqli_fetch_assoc($result)) {
+      $username = $row['username'];
+      echo "<option value=\"$username\">$username</option>";
+  }
+  ?>
+</select>
+
+      <select id="edit_department" name="department">
+        <option value="" disabled selected>Change department</option>
+  <!-- Options will be populated dynamically by PHP -->
+  <?php
+// Fetch department options from the database
+$departmentOptions = array("Cleaner", "Accountant", "Butcher man", " IT", "Finance");
+// You can also fetch these options from a database query
+
+// Generate <option> elements
+foreach ($departmentOptions as $option) {
+    echo "<option value=\"$option\">$option</option>";
+}
+?>
+
+</select> <br>
+      <button type="submit" name="edit_employee">Update</button>
       <button type="submit" name="delete_employee">Delete</button>
   </form>
 
+
+  
   <?php 
 
   // Using prepared statement for editing an employee
   if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["edit_employee"])) {
     $username = $_POST["username"];
-    $fullname = $_POST["fullname"];
-    $email = $_POST["email"];
+   
     $department = $_POST["department"];
     
-    $update_query = "UPDATE employees SET fullname=?, email=?, department=? WHERE username=?";
+    $update_query = "UPDATE employees SET department=? WHERE username=?";
     $stmt = $conn->prepare($update_query);
-    $stmt->bind_param("ssss", $fullname, $email, $department, $username);
+    $stmt->bind_param("ss", $department, $username);
     
     if ($stmt->execute()) {
         echo "Employee updated successfully!";
@@ -271,8 +307,6 @@ a:hover i{
             let data = JSON.parse(xhr.responseText);
             // Populate input fields with fetched data
             document.getElementById("edit_username").value = data.username;
-            document.getElementById("edit_fullname").value = data.fullname;
-            document.getElementById("edit_email").value = data.email;
             document.getElementById("edit_department").value = data.department;
           } else {
             console.error("Error fetching employee data.");
