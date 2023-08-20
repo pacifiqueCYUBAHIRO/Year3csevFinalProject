@@ -1,15 +1,41 @@
-<?php 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "pacifique";
+<?php
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'pacifique';
 
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+$connection = mysqli_connect($host, $user, $password, $database);
 
-$sql = "SELECT image_data, username, department from employees";
-$all_data = $conn->query($sql);
+if (!$connection) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
 
+// Default to displaying all attendance records
+$query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+            FROM employees
+            INNER JOIN attendance ON employees.username = attendance.username";
+
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    die('Query failed: ' . mysqli_error($connection));
+}
+
+$current_date = date('Y-m-d'); // Get the current date in 'YYYY-MM-DD' format
+
+if (isset($_POST['search'])) {
+  $search_date = $_POST['search_date'];
+  $query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+            FROM employees
+            INNER JOIN attendance ON employees.username = attendance.username
+            WHERE attendance.date = '$current_date'";
+
+  $result = mysqli_query($connection, $query);
+
+  if (!$result) {
+    die('Query failed: ' . mysqli_error($connection));
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -298,6 +324,50 @@ color: white;
         <h1>Attendance</h1>
         <i class="fas fa-user-cog"></i>
       </div>
+
+      <form method="post">
+    <!-- ... (your existing HTML form content) ... -->
+    <label for="search_date">Search by Date:</label>
+    <input type="date" id="search_date" name="search_date">
+    <button class="btn" id="search_button" name="search">Search</button>
+  </form>
+
+  <?php
+  if (isset($_POST['search'])) {
+    if (mysqli_num_rows($result) > 0) {
+      echo '<table class="table">';
+      echo '<thead>';
+      echo '<tr>';
+      echo '<th>ID</th>';
+      echo '<th>Username</th>';
+      echo '<th>Email</th>';
+      echo '<th>Department</th>';
+      echo '<th>Date</th>';
+      echo '<th>Join Time</th>';
+      echo '<th>Logout Time</th>';
+      echo '</tr>';
+      echo '</thead>';
+      echo '<tbody>';
+
+      while ($row = mysqli_fetch_assoc($result)) {
+        echo '<tr>';
+        echo '<td>' . $row['id'] . '</td>';
+        echo '<td>' . $row['username'] .'</td>';
+        echo '<td>' . $row['email'] . '</td>';
+        echo '<td>' . $row['department'] . '</td>';
+        echo '<td>' . $row['date'] . '</td>';
+        echo '<td>' . $row['join_time'] . '</td>';
+        echo '<td>' . $row['logout_time'] . '</td>';
+        echo '</tr>';
+      }
+
+      echo '</tbody>';
+      echo '</table>';
+    } else {
+      echo 'No attendance records found for the selected date.';
+    }
+  }
+  ?>
      
       <?php
 
@@ -329,64 +399,15 @@ if (isset($_POST['save'])) {
   mysqli_close($connection);
 }
 
+
 $connection = mysqli_connect($host, $user, $password, $database);
-
-if (!$connection) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-$query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
-          FROM employees
-          INNER JOIN attendance ON employees.username = attendance.username";
-
-$result = mysqli_query($connection, $query);
-
-if (!$result) {
-    die('Query failed: ' . mysqli_error($connection));
-}
-echo'<form method="post">';
-
-// Start the attendance table body
-echo '<table class="table">';
-echo '<thead>';
-echo '<tr>';
-echo '<th>ID</th>';
-echo '<th id="user">Username</th>';
-echo '<th>Email</th>';
-echo '<th>Department</th>';
-echo '<th>Date</th>';
-echo '<th>Join Time</th>';
-echo '<th>Logout Time</th>';
-echo '</tr>';
-echo '</thead>';
-echo '<tbody>';
-
-// Fetch data from the result set
-while ($row = mysqli_fetch_assoc($result)) {
-  echo '<tr>';
-  echo '<td>' . $row['id'] . '</td>';
-  echo '<td>' . $row['username'] .'</td>';
-  echo '<td>' . $row['email'] . '</td>';
-  echo '<td>' . $row['department'] . '</td>';
-  echo '<td>' . $row['date'] . '</td>';
-  echo '<td>' . $row['join_time'] . '</td>';
-  echo '<td>' . $row['logout_time'] . '</td>';
-  echo '</tr>';
-}
-
-
-// End the attendance table body
-echo '</tbody>';
-
-echo '</table>';
-
-
     echo'<button class="btn" id="save_attendance" name="save">Save Daily Attendance</button>';
 echo'</form>';
 
 
 // echo'<button class="btn" id="save_attendance" name="save">Save Daily Attendance</button>';
 // Close the database connection
+
 mysqli_close($connection);
 ?>
 

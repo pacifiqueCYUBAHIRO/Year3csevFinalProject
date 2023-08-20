@@ -440,7 +440,6 @@ table thead tr{
 
     <script>
       var jsonData = <?php echo $json_data; ?>;
-      // console.log("All users ========>: ", jsonData);
     </script>
 
     
@@ -466,43 +465,8 @@ if (!$result) {
 die('Query failed: ' . mysqli_error($connection));
 }
 ?>
-  <!-- while ($row = mysqli_fetch_assoc($result)) { -->
-  <!-- <script>
-    let selectedId = document.getElementById('select-id').value;;
-    for(let i = 0; i < jsonData.length; i++) {
-      if(jsonData[i] === selectedId) {
-        let data = ` -->
-       <!-- echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" />';
-       echo'<div class="info">';
-       echo'<table>';
-             echo'<tr>';
-             echo'<td>';echo' <p>Fullname:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['fullname']. '</span>';echo'</td>';echo'</tr>';
-         echo'<tr>';
-         echo'<td>';echo'<p>Username:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['username']. '</span>';echo'</td>';echo'</tr>';
-         echo'<td>';echo'<p>Email:</p>';echo'</td>';echo'<td>';echo'<span>'. $row['email']. '</span>';echo'</td>';echo'</tr>';
-         echo'<td>';echo'<p>Department:</p>';echo'</td>';echo'<td>'; echo'<span>'. $row['department']. '</span>';echo'</td>';
-        
-        echo'</tr>';
-        echo'</table>';
  
-         echo'<div class="percentage">';
-           echo'<table>';
-             echo'<tr>';
-             echo'<td>Month</td>';
-               echo'<td>Year</td>';
-               
-             echo'</tr>';
-             echo'<tr>';
-             echo '<td><span>' . calculatePercentage($attendanceData[$row['username']] ?? 0, 20) . '%</span></td>';
-        echo '<td><span>' . calculatePercentage($attendanceData[$row['username']] ?? 0, 240) . '%</span></td>';
-             echo'</tr>';
-           echo'</table>';
-           echo'</div>';
-         echo'</div>';
-      </script> -->
-      <!-- } -->
-
-
+ 
 <?php
 mysqli_close($connection);
  ?>
@@ -601,15 +565,29 @@ function openAction() {
 
 function calculatePercentage(attendanceCount, totalDays) {
     let percentage = (attendanceCount / totalDays) * 100;
-    console.log("=======", attendanceCount);
     return percentage.toFixed(2); // Format as a two-decimal percentage
+}
+let attendanceData = [];
+
+function fetchAttendanceData() {
+    let url = 'fetch_attendance_data.php'; // Replace with the actual PHP script URL
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            jsonData = data;
+            console.log('Fetched attendance data:', jsonData); // Debug output
+        })
+        .catch(error => {
+            console.error('Error fetching attendance data:', error);
+        });
 }
 
 
 function showSelectProfile(employeeId) {
+    console.log('jsonData:', jsonData); 
     for (let i = 0; i < jsonData.length; i++) {
         if (parseInt(jsonData[i].employee_id) === parseInt(employeeId)) {
-            let attendanceData = jsonData[i].attendanceData; // Retrieve attendance data
+            let attendanceData = jsonData[i].attendanceData; 
             let data = `
                 <img src="uploads/${jsonData[i].username}.jpg" />
                 <div class="info">
@@ -633,29 +611,14 @@ function showSelectProfile(employeeId) {
                     </table>
                     <div class="percentage">
                         <table>
-                            <tr>
-                                <td>Month</td>
-                                <td>Year</td>
-                            </tr>
-                            <tr>
-                                <td><span>${calculatePercentage(attendanceData, 20)}%</span></td>
-                                <td><span>${calculatePercentage(attendanceData, 240)}%</span></td>
-                            </tr>
+                            
                         </table>
                     </div>
                 </div>
                 `;
             document.querySelector('.container-pop').innerHTML = data;
             break;
-  
-
-            // Render the dynamic data
-            // let container = document.createElement('div');
-            // container.className = 'users';
-          //  document.querySelector('.container-pop').innerHTML = data;
-            // document.body.appendChild(container);
-
-            // break; // Exit the loop after rendering the selected employee
+ 
         }
  
     }

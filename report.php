@@ -172,7 +172,8 @@ if (!$connection) {
   die('Connection failed: ' . mysqli_connect_error());
 }
 
-$query = "SELECT * FROM report"; // Modify the query as needed
+$query = "SELECT * FROM report GROUP BY username, date";
+ // Modify the query as needed
 $result = mysqli_query($connection, $query);
 
 if (!$result) {
