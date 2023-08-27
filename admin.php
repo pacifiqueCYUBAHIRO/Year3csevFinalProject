@@ -1,6 +1,3 @@
-<script>
-  let data = "Hello ";
-</script>
 
 <?php 
 $servername = "localhost";

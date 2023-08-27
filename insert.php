@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // header("Location: register.html");
 	echo '<script>
 	window.onload = function() {
-		alert("Data inserted successfully!");
+		alert("You have registered successfully!");
 		window.location = "login.html";
 	};
 </script>';

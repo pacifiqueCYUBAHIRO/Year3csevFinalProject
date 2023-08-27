@@ -21,22 +21,8 @@ if (!$result) {
     die('Query failed: ' . mysqli_error($connection));
 }
 
-$current_date = date('Y-m-d'); // Get the current date in 'YYYY-MM-DD' format
-
-if (isset($_POST['search'])) {
-  $search_date = $_POST['search_date'];
-  $query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
-            FROM employees
-            INNER JOIN attendance ON employees.username = attendance.username
-            WHERE attendance.date = '$current_date'";
-
-  $result = mysqli_query($connection, $query);
-
-  if (!$result) {
-    die('Query failed: ' . mysqli_error($connection));
-  }
-}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -242,8 +228,8 @@ table thead tr{
 
 }
 .table tbody tr{
-  border-left: 1px solid #fff;
-  border-right: 1px solid #fff;
+  border-left: 1px solid #0b5885;
+  border-right: 1px solid #0b5885;
   
 }
 .table button{
@@ -277,6 +263,23 @@ background: #0b5885;
 color: white;
 }
 
+
+@media print {
+    body {
+      font-size: 12pt; /* Adjust font size for printing */
+    }
+
+    .print-content {
+      display: block; /* Show this element when printing */
+      /* Add more styling specific for printing */
+    }
+
+    /* Hide elements that you don't want to print */
+    .no-print {
+      display: none;
+    }
+  }
+
   </style>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
@@ -285,7 +288,7 @@ color: white;
   <div class="container">
 
 
-    <nav>
+    <nav class="no-print">
       <ul>
         <li><a href="#" class="logo">
           <img src="./images/photo.png">
@@ -318,23 +321,26 @@ color: white;
       </ul>
     </nav>
 
-    <section class="main">
+    <section class="main" >
  
       <div class="main-top">
-        <h1>Attendance</h1>
+        <h1>Attendance List</h1>
         <i class="fas fa-user-cog"></i>
       </div>
 
-      <form method="post">
-    <!-- ... (your existing HTML form content) ... -->
+      <form method="post" class="no-print">
     <label for="search_date">Search by Date:</label>
     <input type="date" id="search_date" name="search_date">
-    <button class="btn" id="search_button" name="search">Search</button>
+    <button style="margin-left: 860px; padding: 5px 30px;" class="btn" id="search_button" name="search">Search</button>
   </form>
 
   <?php
   if (isset($_POST['search'])) {
-    if (mysqli_num_rows($result) > 0) {
+    $search_date = $_POST['search_date'];
+    
+    if ($search_date === '') {
+      echo '<p>Please select a date to filter by.</p>';
+    } else {
       echo '<table class="table">';
       echo '<thead>';
       echo '<tr>';
@@ -350,26 +356,57 @@ color: white;
       echo '<tbody>';
 
       while ($row = mysqli_fetch_assoc($result)) {
-        echo '<tr>';
-        echo '<td>' . $row['id'] . '</td>';
-        echo '<td>' . $row['username'] .'</td>';
-        echo '<td>' . $row['email'] . '</td>';
-        echo '<td>' . $row['department'] . '</td>';
-        echo '<td>' . $row['date'] . '</td>';
-        echo '<td>' . $row['join_time'] . '</td>';
-        echo '<td>' . $row['logout_time'] . '</td>';
-        echo '</tr>';
+        if ($row['date'] === $search_date) {
+          echo '<tr>';
+          echo '<td>' . $row['id'] . '</td>';
+          echo '<td>' . $row['username'] .'</td>';
+          echo '<td>' . $row['email'] . '</td>';
+          echo '<td>' . $row['department'] . '</td>';
+          echo '<td>' . $row['date'] . '</td>';
+          echo '<td>' . $row['join_time'] . '</td>';
+          echo '<td>' . $row['logout_time'] . '</td>';
+          echo '</tr>';
+        }
       }
 
       echo '</tbody>';
       echo '</table>';
-    } else {
-      echo 'No attendance records found for the selected date.';
     }
+  } else {
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>ID</th>';
+    echo '<th>Username</th>';
+    echo '<th>Email</th>';
+    echo '<th>Department</th>';
+    echo '<th>Date</th>';
+    echo '<th>Join Time</th>';
+    echo '<th>Logout Time</th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+
+    while ($row = mysqli_fetch_assoc($result)) {
+      echo '<tr>';
+      echo '<td>' . $row['id'] . '</td>';
+      echo '<td>' . $row['username'] .'</td>';
+      echo '<td>' . $row['email'] . '</td>';
+      echo '<td>' . $row['department'] . '</td>';
+      echo '<td>' . $row['date'] . '</td>';
+      echo '<td>' . $row['join_time'] . '</td>';
+      echo '<td>' . $row['logout_time'] . '</td>';
+      echo '</tr>';
+    }
+
+    echo '</tbody>';
+    echo '</table>';
   }
+
+  
   ?>
-     
-      <?php
+
+<?php
 
 $host = 'localhost';
 $user = 'root';
@@ -401,23 +438,23 @@ if (isset($_POST['save'])) {
 
 
 $connection = mysqli_connect($host, $user, $password, $database);
-    echo'<button class="btn" id="save_attendance" name="save">Save Daily Attendance</button>';
-echo'</form>';
-
-
-// echo'<button class="btn" id="save_attendance" name="save">Save Daily Attendance</button>';
-// Close the database connection
+echo '<form method="post">';
+echo '<button class="btn no-print" id="save_attendance" name="save" print()>Save Daily Attendance</button>';
+echo '</form>';
 
 mysqli_close($connection);
 ?>
-
+  <button style="margin-top: 20px; padding: 5px 30px;" class="no-print btn" id="printButton">Print Page</button>
         </div>
+        
       </section>
-   
-    </section>
-      
-    
   </div>
 
+<script>
+  // JavaScript to handle printing when the button is clicked
+  document.getElementById("printButton").addEventListener("click", function() {
+    window.print();
+  });
+</script>
 </body>
 </html>
