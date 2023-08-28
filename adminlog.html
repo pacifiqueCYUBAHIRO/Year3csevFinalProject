@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/03d0a7c683.js" crossorigin="anonymous"></script>
     <title>Signup/Login</title>
     <style>
@@ -114,15 +117,22 @@
         font-size: 12px;
       }
       
-      .footer{
-        color: #FFFFFF;
-        background: rgb(1, 13, 44);
-        text-align: center;
-        padding: 20px;
-
-    }
-  
     
+  
+    @media screen and (max-width: 850px) {
+      nav{
+        width: 100%;
+      }
+      .main{
+        display: flex;
+        justify-content: center;
+        align-items: start;
+
+      }
+      .login-container{
+        width: 100%;
+      }
+    }
 
     </style>
   </head>
@@ -160,7 +170,7 @@
 
 </div>
 
-    <div class="footer">&COPY; 2023</div>
+    <!-- <div class="footer">&COPY; 2023</div> -->
 
   </body>
   <script>
