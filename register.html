@@ -1,7 +1,9 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup/Login</title>
     <style>
       body{
@@ -65,7 +67,6 @@
         background-color: #ffffff;
       }
 
-      /* Style for the form input fields */
       input[type="text"], input[type="password"], input[type="email"], input[type="file"] {
         padding: 10px;
         margin: 10px 0;
@@ -83,7 +84,6 @@
         margin-left: 12px; 
       }
 
-      /* Style for the form submit button */
       input[type="submit"] {
         background: #0b5885;
         color: white;
@@ -99,14 +99,12 @@
         transition: 0.5s ease-in-out;
       }
 
-      /* Style for the form header */
       h3 {
         font-size: 30px;
         margin: 0;
         margin-bottom: 10px;
       }
 
-      /* Style for the form footer */
       p {
         margin: 0;
         margin-top: 20px;
@@ -127,11 +125,70 @@
       padding: 10px;
       border: none;
       cursor: pointer;
+      margin-right: 100px;
       
     }
     #capture:hover{
       background: #063a58;
       transition: 0.5s ease-in-out;
+    }
+    .captr{
+      display: flex;
+      justify-content: center;
+      width: 100%;
+
+    }
+
+    input[type="button"]{
+      width: 100%;
+      height: 40px;
+  }
+
+    @media screen and (max-width: 850px) {
+      nav{
+        width: 100%;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 0;
+        margin: 10px;
+      }
+      select{
+        width: 93%;
+      }
+      input[type="button"]{
+          width: 60%;
+          margin-left: 50px;
+          
+      }
+      .captr{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        padding: 20px 0;
+      }
+      
+      
+      .form-container{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      
+      input[type="text"], input[type="password"], input[type="email"], input[type="file"] {
+        width: 87%;
+       
+      }
+ 
+      input[type="submit"] {
+        width: 100%;
+      }
+      
     }
    
     </style>
@@ -150,11 +207,13 @@
     <div class="container">
       <div class="form-container">
         <h3>Sign up</h3>
+
         <form method="POST" action="insert.php">
-          <pre>
-  <video id="video" width="220" height="140" style="margin: 0;" autoplay></video><canvas id="canvas" width="200" height="140" name="image" required></canvas>
-                            <button id="capture">Capture</button>
-        </pre>
+    <div class="captr">
+  <video id="video" width="220" height="140" style="margin: 0;" autoplay>
+  </video><canvas id="canvas" width="190" height="140" name="image" required></canvas>
+  
+</div>     <input type="button" id="capture" value="Capture" /> <br>
           <input type="text" placeholder="Fullname" name="fullname" required>
           <input type="text" placeholder="Username" name="username" required>
           <input type="email" placeholder="Email" name="email" required>
@@ -168,11 +227,11 @@
               <option value="it"> IT</option>
           </select>
           
-          <input type="password" placeholder="Password" name="password" required>
-          <input type="password" placeholder="ConfirmPassword" required><br>
-          &nbsp; <input type="checkbox" required><a href="tems&conditions.html" target="_blank" style="text-decoration: none;">  Accept all terms and condition</a>
+          <input type="password" placeholder="Password" name="password" required />
+          <input type="password" placeholder="ConfirmPassword" required /><br>
+          &nbsp; <input type="checkbox" required /><a href="tems&conditions.html" target="_blank" style="text-decoration: none;">  Accept all terms and condition</a>
           <br><br>
-          <input type="submit" value="SignUp">
+          <input type="submit" value="SignUp" />
       </form>
       
         <p>Already have an account? <a href="login.html">Log in</a></p>
