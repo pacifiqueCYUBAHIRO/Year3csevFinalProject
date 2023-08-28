@@ -167,9 +167,19 @@ if (mysqli_num_rows($result) > 0) {
         }
         .square{
             width: 300px;
-            height: 300px;
+            height: 290px;
             border: 2px solid black;
         }
+        form{
+            display: flex;
+            justify-content: center;
+            margin-right: 200px;
+        }
+        .butt{
+           display: flex;
+           justify-content: center;
+           padding: 9px;
+           }
        
         @media screen and (max-width: 850px) {
            .box{
@@ -178,12 +188,16 @@ if (mysqli_num_rows($result) > 0) {
             margin: 20px;
             align-items: center;
             justify-content: center;
+            gap: 20px;
             
-           } 
-           .butt{
-           display: flex;
-           flex-direction: row;
            }
+           form{
+            margin: 0;
+           }
+           .butt{
+            display: flex;
+            flex-direction: column;
+           } 
            h1{
             display: block;
            }
@@ -203,26 +217,28 @@ if (mysqli_num_rows($result) > 0) {
         
             <br><h1>LOOK ON WEBCAM  FOR ATTENDANCE</h1>
             <hr>
+            <br>
             
             <div class="box">
   
 
-<pre><video class="square" id="video" autoplay></video>  <canvas class="square" id="canvas"></canvas></pre>
+<video class="square" id="video" autoplay></video>  
+<canvas class="square" id="canvas"></canvas>
 </div>
 
-<div class="butt"> <button id="capture">CAPTURE</button>
+
+<div class="butt"> 
+
+    <button id="capture">CAPTURE</button>
  <form method="post">
         <button type="submit" name="submit">Make Attendance</button>
     </form>
     <form method="post">
         <button name="leave">Logout</button>
     </form>
-    
+
 </div>
 
-
-    
-</div>
 
 
 <div class="footer"> &COPY; 2023</div>
