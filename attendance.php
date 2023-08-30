@@ -5,6 +5,38 @@ if (!isset($_SESSION['logged-in'])) {
 // echo $_SESSION['logged-in'];
 }
 ?>
+
+<?php 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "pacifique";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+
+if (isset($_POST['update'])) {
+    $fullname = $_POST['fullname'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Update the employee's information in the database
+    $username = $_SESSION['username'];
+    $updateQuery = "UPDATE employees SET fullname = '$fullname', email = '$email', password = '$password' WHERE username = '$username'";
+    
+    if (mysqli_query($conn, $updateQuery)) {
+        echo '<script>
+            window.onload = function() {
+                alert("Profile updated successfully!");
+            };
+        </script>';
+    } else {
+        echo "Error updating profile: " . mysqli_error($conn);
+    }
+}
+?>
+
 <?php
 $servername = "localhost";
 $username = "root";
@@ -180,6 +212,43 @@ if (mysqli_num_rows($result) > 0) {
            justify-content: center;
            padding: 9px;
            }
+
+
+           /* Add your existing CSS styles */
+
+/* Style for the modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Style for the modal content */
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+    position: relative;
+}
+
+/* Style for the close button */
+.close {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
        
         @media screen and (max-width: 850px) {
            .box{
@@ -239,6 +308,23 @@ if (mysqli_num_rows($result) > 0) {
 
 </div>
 
+ <button id="open-profile-modal">Edit Profile</button>
+
+<div id="profile-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-profile-modal">&times;</span>
+        <h2>Edit Your Profile</h2>
+        <form method="post">
+            <label for="fullname">Change your Email:</label>
+            <input type="text" id="email" name="email" value="" required><br>
+            <label for="fullname">Change Full Name:</label>
+            <input type="text" id="fullname" name="fullname" value="" required><br>
+            <label for="fullname">Create new password:</label>
+            <input type="text" id="password" name="password" value="" required><br>
+            <button type="submit" name="update">Update Profile</button>
+        </form>
+    </div>
+</div>
 
 
 <div class="footer"> &COPY; 2023</div>
@@ -272,5 +358,30 @@ capture.addEventListener("click",function(){
         if (d.head) d.head.appendChild(s);
     })(document, window, 'Chatra');
 </script>
+
+
+<script>
+// Open the profile update modal when the button is clicked
+const openProfileModalButton = document.getElementById('open-profile-modal');
+const profileModal = document.getElementById('profile-modal');
+const closeProfileModalButton = document.getElementById('close-profile-modal');
+
+openProfileModalButton.addEventListener('click', function() {
+    profileModal.style.display = 'block';
+});
+
+// Close the profile update modal when the close button is clicked
+closeProfileModalButton.addEventListener('click', function() {
+    profileModal.style.display = 'none';
+});
+
+// Close the profile update modal if the user clicks outside of it
+window.addEventListener('click', function(event) {
+    if (event.target === profileModal) {
+        profileModal.style.display = 'none';
+    }
+});
+</script>
+
 </body>
 </html>
