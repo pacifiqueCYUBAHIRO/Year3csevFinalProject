@@ -118,7 +118,10 @@
         margin-top: 10px;
         font-size: 12px;
       }
-      
+      .active1{
+        transition: 0.2s ease-in;
+        color:  yellowgreen;
+    }
       
     @media screen and (max-width: 850px) {
       nav{
@@ -133,14 +136,16 @@
   <body>
 
     <nav>
-      <h2>O E F R <span style="color: yellowgreen;">A </span>S</h2>
+      <a href="index.html"><h2> O E F R <span style="color: yellowgreen;">A </span>S</h2></a>
+     
       <ul>
         <li>
           <a href="index.html">Home</a>
-          <a href="adminlog.html" style="background-color: #0b5885;  text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
+          <a href="login.html" class="active1">Attendance</a>
+         <a href="adminlog.html" style="background-color: #0b5885; text-align: center; border-radius: 10px; padding: 10px;">Admin</a>
         </li>
       </ul>
-    </nav>
+    </nav> 
 
     <div class="container">
 

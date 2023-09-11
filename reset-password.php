@@ -190,7 +190,7 @@ nav ul li a{
         <div class="login-container">
             <h2>Reset Password</h2>
             <form action="update-password.php" method="post">
-                <!-- <input type="hidden" name="token" value="<?php echo $_GET['token']; ?>"> -->
+                <input type="hidden" name="token" value="<?php echo $_GET['token']; ?>">
                 <div class="form-group">
                     <label for="new_password">New Password</label>
                     <input type="password" id="new_password" name="new_password" placeholder="Create new password" required>

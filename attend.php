@@ -11,7 +11,7 @@ if (!$connection) {
 }
 
 // Default to displaying all attendance records
-$query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.join_time, attendance.logout_time
+$query = "SELECT attendance.username,attendance.id, employees.fullname, employees.email, employees.department, attendance.date, attendance.image_data, attendance.join_time, attendance.logout_time
             FROM employees
             INNER JOIN attendance ON employees.username = attendance.username";
 
@@ -132,56 +132,10 @@ a:hover i{
   color: rgb(110, 109, 109);
   cursor: pointer;
 }
-.main .users{
-  display: flex;
-}
-.users .card{
-  width: 25%;
-  margin: 10px;
-  background: #fff;
-  text-align: center;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-}
-.users .card img{
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-}
-.users .card h4{
-  text-transform: uppercase;
-}
-.users .card p{
-  font-size: 12px;
-  margin-bottom: 15px;
-  text-transform: uppercase;
-}
-.users table{
-  margin:  auto;
-}
-.users .per span{
-  padding: 5px;
-  border-radius: 10px;
-  background: rgb(223, 223, 223);
-}
-.users td{
-  font-size: 14px;
-  padding-right: 15px;
-}
-.users .card button{
-  width: 100%;
-  margin-top: 8px;
-  padding: 7px;
-  cursor: pointer;
-  border-radius: 10px;
-  background: transparent;
-  border: 1px solid #0b5885;
-}
-.users .card button:hover{
-  background: #0b5885;
-  color: #fff;
-  transition: 0.5s;
+
+.main img{
+  width: 50px;
+  height: 50px;
 }
 
 /*Attendance List serction  */
@@ -264,6 +218,49 @@ color: white;
 }
 
 
+
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
+  }
+
+  /* Modal Content */
+  .modal-content {
+    text-align: center; /* Center the image horizontally */
+    margin: 10% auto; /* Center the modal vertically */
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Close Button */
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+  }
+
+.modal-content img {
+    max-width: 800px;
+    max-height: 300px;
+  }
+
+
+
+
 @media print {
     body {
       font-size: 12pt; /* Adjust font size for printing */
@@ -285,6 +282,15 @@ color: white;
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 </head>
 <body>
+
+
+<div id="imageModal" class="modal">
+  <span class="close" id="closeModal">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
+
+
+
   <div class="container">
 
 
@@ -351,6 +357,7 @@ color: white;
       echo '<th>Date</th>';
       echo '<th>Join Time</th>';
       echo '<th>Logout Time</th>';
+      echo '<th>Picture</th>';
       echo '</tr>';
       echo '</thead>';
       echo '<tbody>';
@@ -365,6 +372,9 @@ color: white;
           echo '<td>' . $row['date'] . '</td>';
           echo '<td>' . $row['join_time'] . '</td>';
           echo '<td>' . $row['logout_time'] . '</td>';
+          echo '<td>';
+          echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" onclick="openModal(\'data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '\')" style="cursor: pointer;" />';
+          echo '</td>';
           echo '</tr>';
         }
       }
@@ -383,6 +393,7 @@ color: white;
     echo '<th>Date</th>';
     echo '<th>Join Time</th>';
     echo '<th>Logout Time</th>';
+    echo '<th>Picture</th>';
     echo '</tr>';
     echo '</thead>';
     echo '<tbody>';
@@ -396,6 +407,9 @@ color: white;
       echo '<td>' . $row['date'] . '</td>';
       echo '<td>' . $row['join_time'] . '</td>';
       echo '<td>' . $row['logout_time'] . '</td>';
+      echo '<td>';
+      echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" onclick="openModal(\'data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '\')" style="cursor: pointer;" />';
+      echo '</td>';
       echo '</tr>';
     }
 
@@ -405,6 +419,7 @@ color: white;
 
   
   ?>
+
 
 <?php
 
@@ -455,6 +470,34 @@ mysqli_close($connection);
   document.getElementById("printButton").addEventListener("click", function() {
     window.print();
   });
+</script>
+
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("imageModal");
+
+  // Get the image and close button that opens the modal
+  var modalImage = document.getElementById("modalImage");
+  var closeModal = document.getElementById("closeModal");
+
+  // Function to open the modal with the specified image
+  function openModal(imageUrl) {
+    modal.style.display = "block";
+    modalImage.src = imageUrl;
+  }
+
+  // Close the modal when the close button is clicked
+  closeModal.onclick = function() {
+    modal.style.display = "none";
+  };
+
+  // Close the modal when the user clicks anywhere outside of it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
 </script>
 </body>
 </html>

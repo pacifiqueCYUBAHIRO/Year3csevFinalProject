@@ -1,4 +1,11 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// Load Composer's autoloader
+require 'vendor/autoload.php';
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -11,13 +18,6 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
-// Load Composer's autoloader
-require 'vendor/autoload.php';
 
 function send_password_reset($email, $reset_token) {
     $mail = new PHPMailer(true);
@@ -62,7 +62,13 @@ if (mysqli_num_rows($result) > 0) {
         // Send reset email with link to reset-password.php
         try {
             send_password_reset($email, $resetToken);
-            echo "Password reset link sent to your email.";
+            echo '<script>
+            window.onload = function() {
+                alert("Password reset link sent to your email.");
+                window.location = "login.html";
+            };
+        </script>'; 
+            
         } catch (Exception $e) {
             echo "Error sending email: " . $e->getMessage();
         }
@@ -77,7 +83,6 @@ if (mysqli_num_rows($result) > 0) {
         window.location = "forgot-password.php";
     };
 </script>';
-
 }
 
 mysqli_close($conn);
