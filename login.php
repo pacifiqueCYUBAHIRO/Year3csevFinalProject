@@ -30,7 +30,7 @@ if (mysqli_num_rows($result) > 0) {
 	// Check if the input password matches the stored password's case
 	if ($passwordInput === $storedPassword) {
 		// Password case matches, set session variables and redirect to dashboard
-		$_SESSION['id'] = $row['id'];
+		$_SESSION['employee_id'] = $row['employee_id'];
 		$_SESSION['username'] = $row['username'];
 		$_SESSION["logged-in"] = true;
 		header('Location: attendance.php');

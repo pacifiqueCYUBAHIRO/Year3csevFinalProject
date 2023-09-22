@@ -184,7 +184,7 @@ table thead tr{
 .table tbody tr{
   border-left: 1px solid #0b5885;
   border-right: 1px solid #0b5885;
-  
+
 }
 .table button{
   padding: 6px 20px;
@@ -213,7 +213,7 @@ table thead tr{
 }
 
 .btn:hover{
-background: #0b5885;  
+background: #0b5885;
 color: white;
 }
 
@@ -240,6 +240,7 @@ color: white;
     display: block;
     max-width: 100%;
     max-height: 100%;
+
   }
 
   /* Close Button */
@@ -252,12 +253,6 @@ color: white;
     color: white;
     cursor: pointer;
   }
-
-.modal-content img {
-    max-width: 800px;
-    max-height: 300px;
-  }
-
 
 
 
@@ -286,7 +281,7 @@ color: white;
 
 <div id="imageModal" class="modal">
   <span class="close" id="closeModal">&times;</span>
-  <img class="modal-content" id="modalImage">
+  <img width="600px" height="400px" class="modal-content" id="modalImage">
 </div>
 
 
@@ -328,7 +323,7 @@ color: white;
     </nav>
 
     <section class="main" >
- 
+
       <div class="main-top">
         <h1>Attendance List</h1>
         <i class="fas fa-user-cog"></i>
@@ -343,14 +338,14 @@ color: white;
   <?php
   if (isset($_POST['search'])) {
     $search_date = $_POST['search_date'];
-    
+
     if ($search_date === '') {
       echo '<p>Please select a date to filter by.</p>';
     } else {
       echo '<table class="table">';
       echo '<thead>';
       echo '<tr>';
-      echo '<th>ID</th>';
+
       echo '<th>Username</th>';
       echo '<th>Email</th>';
       echo '<th>Department</th>';
@@ -358,6 +353,8 @@ color: white;
       echo '<th>Join Time</th>';
       echo '<th>Logout Time</th>';
       echo '<th>Picture</th>';
+      echo '<th>Action</th>';
+
       echo '</tr>';
       echo '</thead>';
       echo '<tbody>';
@@ -365,7 +362,7 @@ color: white;
       while ($row = mysqli_fetch_assoc($result)) {
         if ($row['date'] === $search_date) {
           echo '<tr>';
-          echo '<td>' . $row['id'] . '</td>';
+
           echo '<td>' . $row['username'] .'</td>';
           echo '<td>' . $row['email'] . '</td>';
           echo '<td>' . $row['department'] . '</td>';
@@ -375,6 +372,11 @@ color: white;
           echo '<td>';
           echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" onclick="openModal(\'data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '\')" style="cursor: pointer;" />';
           echo '</td>';
+          echo '<td>';
+          echo '<button class="delete-button" data-id="' . $row['id'] . '">Delete</button>';
+
+          echo '</td>';
+
           echo '</tr>';
         }
       }
@@ -386,7 +388,7 @@ color: white;
     echo '<table class="table">';
     echo '<thead>';
     echo '<tr>';
-    echo '<th>ID</th>';
+
     echo '<th>Username</th>';
     echo '<th>Email</th>';
     echo '<th>Department</th>';
@@ -394,13 +396,14 @@ color: white;
     echo '<th>Join Time</th>';
     echo '<th>Logout Time</th>';
     echo '<th>Picture</th>';
+    echo '<th>Action</th>';
     echo '</tr>';
     echo '</thead>';
     echo '<tbody>';
 
     while ($row = mysqli_fetch_assoc($result)) {
       echo '<tr>';
-      echo '<td>' . $row['id'] . '</td>';
+
       echo '<td>' . $row['username'] .'</td>';
       echo '<td>' . $row['email'] . '</td>';
       echo '<td>' . $row['department'] . '</td>';
@@ -408,8 +411,12 @@ color: white;
       echo '<td>' . $row['join_time'] . '</td>';
       echo '<td>' . $row['logout_time'] . '</td>';
       echo '<td>';
-      echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" onclick="openModal(\'data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '\')" style="cursor: pointer;" />';
+      echo '<img src="data:image/jpg;charset=utf8;base64,' . base64_encode($row['image_data']) . '" onclick="openModal(\'data:image/png;charset=utf8;base64,' . base64_encode($row['image_data']) . '\')" style="cursor: pointer;" />';
       echo '</td>';
+      echo '<td>';
+                  echo '<button class="delete-button" data-id="' . $row['id'] . '">Delete</button>';
+
+                echo '</td>';
       echo '</tr>';
     }
 
@@ -417,7 +424,7 @@ color: white;
     echo '</table>';
   }
 
-  
+
   ?>
 
 
@@ -461,7 +468,7 @@ mysqli_close($connection);
 ?>
   <button style="margin-top: 20px; padding: 5px 30px;" class="no-print btn" id="printButton">Print Page</button>
         </div>
-        
+
       </section>
   </div>
 
@@ -469,6 +476,36 @@ mysqli_close($connection);
   // JavaScript to handle printing when the button is clicked
   document.getElementById("printButton").addEventListener("click", function() {
     window.print();
+  });
+</script>
+
+
+
+
+<script>
+  // JavaScript to handle the delete button click
+  document.querySelectorAll(".delete-button").forEach(function(button) {
+    button.addEventListener("click", function() {
+      // Get the ID of the row to delete
+      var idToDelete = this.getAttribute("data-id");
+
+      // Confirm with the user if they want to delete
+      var confirmation = confirm("Are you sure you want to delete this record?");
+
+      if (confirmation) {
+        // If confirmed, send an AJAX request to delete the record
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "delete.php", true); // Replace "delete.php" with your PHP delete script
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Reload the page or update the table data after successful deletion
+            location.reload();
+          }
+        };
+        xhr.send("id=" + idToDelete);
+      }
+    });
   });
 </script>
 

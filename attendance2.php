@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </script>';
         exit; // Exit the script
     }
+}
 
     $servername = "localhost";
     $username = "root";
@@ -152,5 +153,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Close the database connection
     mysqli_close($conn);
-}
 ?>

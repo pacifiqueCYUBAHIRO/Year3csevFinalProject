@@ -222,7 +222,7 @@ table thead tr{
 .table tbody tr{
   border-left: 1px solid #fff;
   border-right: 1px solid #fff;
-  
+
 }
 .table button{
   padding: 6px 20px;
