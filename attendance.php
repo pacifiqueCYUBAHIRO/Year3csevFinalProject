@@ -6,162 +6,152 @@ if (!isset($_SESSION['logged-in'])) {
 }
 ?>
 <?php
-
-// Define the allowed IP range for your network
 $allowedIPRange = "192.168.1.0/24"; // Example: Allow all IP addresses in the range 192.168.1.1 to 192.168.1.254
-
-// Get the user's IP address
 $userIP = $_SERVER['REMOTE_ADDR'];
-
-// Convert the allowed IP range to numeric form
 list($allowedIP, $subnetMask) = explode('/', $allowedIPRange);
 $allowedIPNumeric = ip2long($allowedIP);
 $subnetMaskNumeric = pow(2, (32 - $subnetMask)) - 1;
-
-// Convert the user's IP address to numeric form
 $userIPNumeric = ip2long($userIP);
 
-// Check if the user's IP is within the allowed range
-if (($userIPNumeric & $subnetMaskNumeric) === ($allowedIPNumeric & $subnetMaskNumeric)) {
-    // User's IP is allowed, continue with attendance
+if (($userIPNumeric & $subnetMaskNumeric) !== ($allowedIPNumeric & $subnetMaskNumeric)) {
+    // User's IP is not allowed, deny access
+    echo "Access denied. Your IP address is not authorized for attendance.";
+    exit;
+}
 
-    // Check if the request method is POST
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Get the image data from the POST request
-        $imageData = $_POST['image_data'];
+// Your database connection code (replace with your credentials)
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "pacifique";
 
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "pacifique";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
 
-        // Create connection
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
+// Check the database connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-        // Check the database connection
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the image data from the POST request
+    $imageData = $_POST['image_data'];
 
-        // Retrieve the current date and time
-        $currentDate = date('Y-m-d');
-        $currentTime = date('H:i:s');
+    // Retrieve the current date and time
+    $currentDate = date('Y-m-d');
+    $currentTime = date('H:i:s');
 
-        // Check if the user is logged in (you should add more robust authentication)
-        if (isset($_SESSION['username'])) {
-            $username = $_SESSION['username'];
+    // Check if the user is logged in (you should add more robust authentication)
+    if (isset($_SESSION['username'])) {
+        $username = $_SESSION['username'];
 
-            // Check if the logout button is pressed
-            if (isset($_POST['leave'])) {
-                // Prepare the SQL statement to update the existing record with the logout time
-                $sql = "UPDATE attendance SET logout_time = '$currentTime' WHERE username = '$username' AND date = '$currentDate'";
+        // Check if the logout button is pressed (if needed)
+        if (isset($_POST['leave'])) {
+            // Prepare the SQL statement to update the existing record with the logout time
+            $sql = "UPDATE attendance SET logout_time = '$currentTime' WHERE username = '$username' AND date = '$currentDate'";
 
-                if (mysqli_query($conn, $sql)) {
-                    echo '<script>
-                        window.onload = function() {
-                            alert("Logout recorded successfully!");
-                            window.location.href = "logout.php";
-                        };
-                    </script>';
-                } else {
-                    echo "Error updating data: " . mysqli_error($conn);
-                }
-            } elseif (!empty($imageData)) {
-                // Decode the base64-encoded image data
-                $decodedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
+            if (mysqli_query($conn, $sql)) {
+                echo '<script>
+                    window.onload = function() {
+                        alert("Logout recorded successfully!");
+                        window.location.href = "logout.php";
+                    };
+                </script>';
+            } else {
+                echo "Error updating data: " . mysqli_error($conn);
+            }
+        } elseif (!empty($imageData)) {
+            // Decode the base64-encoded image data
+            $decodedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
 
-                // Check if the user has already logged in today
-                $sql = "SELECT * FROM attendance WHERE username = '$username' AND date = '$currentDate'";
-                $result = mysqli_query($conn, $sql);
+            // Check if the user has already logged in today
+            $sql = "SELECT * FROM attendance WHERE username = '$username' AND date = '$currentDate'";
+            $result = mysqli_query($conn, $sql);
 
-                if (!$result) {
-                    echo "Error: " . mysqli_error($conn);
-                } elseif (mysqli_num_rows($result) > 0) {
-                    // User has already logged in today, update the existing record
-                    $row = mysqli_fetch_assoc($result);
-                    $attendanceId = $row['id'];
+            if (!$result) {
+                echo "Error: " . mysqli_error($conn);
+            } elseif (mysqli_num_rows($result) > 0) {
+                // User has already logged in today, update the existing record
+                $row = mysqli_fetch_assoc($result);
+                $attendanceId = $row['id'];
 
-                    if (isset($_POST['submit'])) {
-                        // Prepare the SQL statement to update the existing record with the latest join time and image data
-                        $sql = "UPDATE attendance SET join_time = '$currentTime', image_data = ? WHERE id = ?";
-                        $stmt = mysqli_prepare($conn, $sql);
+                if (isset($_POST['submit'])) {
+                    // Prepare the SQL statement to update the existing record with the latest join time and image data
+                    $sql = "UPDATE attendance SET join_time = '$currentTime', image_data = ? WHERE id = ?";
+                    $stmt = mysqli_prepare($conn, $sql);
 
-                        if ($stmt) {
-                            mysqli_stmt_bind_param($stmt, "si", $decodedImageData, $attendanceId);
+                    if ($stmt) {
+                        mysqli_stmt_bind_param($stmt, "si", $decodedImageData, $attendanceId);
 
-                            if (mysqli_stmt_execute($stmt)) {
-                                // Image saving
-                                $uploadPath = 'attend/' . $username . '.jpg'; // Change the extension if needed
-                                if (file_put_contents($uploadPath, $decodedImageData) === false) {
-                                    echo "Error saving image.";
-                                } else {
-                                    echo '<script>
-                                        window.onload = function() {
-                                            alert("Attendance updated successfully!");
-                                        };
-                                    </script>';
-                                }
+                        if (mysqli_stmt_execute($stmt)) {
+                            // Image saving
+                            $uploadPath = 'attend/' . $username . '.jpg'; // Change the extension if needed
+                            if (file_put_contents($uploadPath, $decodedImageData) === false) {
+                                echo "Error saving image.";
                             } else {
-                                echo "Error updating data: " . mysqli_error($conn);
+                                echo '<script>
+                                    window.onload = function() {
+                                        alert("Attendance updated successfully!");
+                                    };
+                                </script>';
                             }
-
-                            mysqli_stmt_close($stmt);
                         } else {
-                            echo "Error preparing statement: " . mysqli_error($conn);
+                            echo "Error updating data: " . mysqli_error($conn);
                         }
-                    }
-                } else {
-                    // User has not logged in today, create a new attendance record with image data
-                    if (isset($_POST['submit'])) {
-                        // Prepare the SQL statement to insert the initial record
-                        $sql = "INSERT INTO attendance (date, join_time, image_data, username) VALUES (?, ?, ?, ?)";
-                        $stmt = mysqli_prepare($conn, $sql);
 
-                        if ($stmt) {
-                            mysqli_stmt_bind_param($stmt, "ssss", $currentDate, $currentTime, $decodedImageData, $username);
-
-                            if (mysqli_stmt_execute($stmt)) {
-                                // Image saving
-                                $uploadPath = 'attend/' . $username . '.png'; // Change the extension if needed
-                                if (file_put_contents($uploadPath, $decodedImageData) === false) {
-                                    echo "Error saving image.";
-                                } else {
-                                    echo '<script>
-                                        window.onload = function() {
-                                            alert("Attendance recorded successfully!");
-                                        };
-                                    </script>';
-                                }
-                            } else {
-                                echo "Error inserting data: " . mysqli_error($conn);
-                            }
-
-                            mysqli_stmt_close($stmt);
-                        } else {
-                            echo "Error preparing statement: " . mysqli_error($conn);
-                        }
+                        mysqli_stmt_close($stmt);
+                    } else {
+                        echo "Error preparing statement: " . mysqli_error($conn);
                     }
                 }
             } else {
-                // Display an error message or prevent submission if no image is captured
-                echo '<script>
-                    window.onload = function() {
-                        alert("Please capture an image before making attendance.");
-                    };
-                </script>';
+                // User has not logged in today, create a new attendance record with image data
+                if (isset($_POST['submit'])) {
+                    // Prepare the SQL statement to insert the initial record
+                    $sql = "INSERT INTO attendance (date, join_time, image_data, username) VALUES (?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($conn, $sql);
+
+                    if ($stmt) {
+                        mysqli_stmt_bind_param($stmt, "ssss", $currentDate, $currentTime, $decodedImageData, $username);
+
+                        if (mysqli_stmt_execute($stmt)) {
+                            // Image saving
+                            $uploadPath = 'attend/' . $username . '.png'; // Change the extension if needed
+                            if (file_put_contents($uploadPath, $decodedImageData) === false) {
+                                echo "Error saving image.";
+                            } else {
+                                echo '<script>
+                                    window.onload = function() {
+                                        alert("Attendance recorded successfully!");
+                                    };
+                                </script>';
+                            }
+                        } else {
+                            echo "Error inserting data: " . mysqli_error($conn);
+                        }
+
+                        mysqli_stmt_close($stmt);
+                    } else {
+                        echo "Error preparing statement: " . mysqli_error($conn);
+                    }
+                }
             }
         } else {
-            // Handle the case where the user is not logged in (you should add proper authentication)
-            echo "User is not logged in.";
+            // Display an error message or prevent submission if no image is captured
+            echo '<script>
+                window.onload = function() {
+                    alert("Please capture an image before making attendance.");
+                };
+            </script>';
         }
-
-        // Close the database connection
-        mysqli_close($conn);
+    } else {
+        // Handle the case where the user is not logged in (you should add proper authentication)
+        echo "User is not logged in.";
     }
-} else {
-    // User's IP is not allowed, deny access
-    echo "Access denied. Your IP address is not authorized for attendance.";
 }
+
+// Close the database connection
+mysqli_close($conn);
 ?>
 
 
@@ -204,14 +194,13 @@ if (isset($_POST['update'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Employee Face Recognation Attendance system</title>
+    <script src="face-api.min.js"></script>
     <style>
         *{
             margin: 0;
             padding: 0;
         }
-        body{
-            background: linear-gradient(to bottom right, #ffffff, #777676);
-        }
+        
         nav{
             display: flex;
             padding: 25px;
@@ -349,6 +338,17 @@ if (isset($_POST['update'])) {
     gap: 30px;
     margin-left: 200px;
 }
+/* canvas{
+    display: absolute;
+} */
+
+#canvas-container{
+    width: 270px;
+    height: 250px;
+    /* border: 2px solid red; */
+    margin-top: -380px;
+    margin-left: -350px;
+}
 
 
         @media screen and (max-width: 850px) {
@@ -391,18 +391,20 @@ if (isset($_POST['update'])) {
 
             <div class="box">
 
-
-<video class="square" id="video" autoplay></video>
-<canvas class="square" id="canvas" name="image"></canvas>
+<div>
+    <video  id="video" class="square" width="600" height="450" autoplay></video>
+    <div id="canvas-container"></div>
 </div>
+<!-- <canvas class="square" id="canvas" name="image"></canvas> -->
+</div><br><br><br><br><br><br><br>
 
 
 <div class="butt">
 
     <!-- <button id="capture">CAPTURE</button> -->
- <form method="post" action="" class="bbtt">
- <button type="button" id="capture" value="Capture"></button>
- <input type="hidden" accept="" name="image_data" id="image-data" required>
+ <form method="post" action="" id="attendance-form" class="bbtt">
+    <input type="hidden" accept="" name="image_data" id="image-data" required>
+ <button type="button" id="capture" value="Capture">Take Picture</button>
         <button type="submit" name="submit">Make Attendance</button>
          <button name="leave">Logout</button>
     </form>
@@ -430,40 +432,107 @@ if (isset($_POST['update'])) {
 
 <div class="footer"> &COPY; 2023</div>
 
-
 <script>
-      const video = document.getElementById('video');
-      const canvas = document.getElementById('canvas');
-      const captureButton = document.getElementById('capture');
-      const imageDataInput = document.getElementById('image-data');
-      const imageInput = document.getElementById('image');
+    const video = document.getElementById('video');
+    const canvasContainer = document.getElementById('canvas-container');
+    const captureButton = document.getElementById('capture');
+    const imageDataInput = document.getElementById('image-data');
+    const imageInput = document.getElementById('image');
 
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-          video.srcObject = stream;
-        })
-        .catch(error => {
-          console.error('Error accessing webcam:', error);
+    Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+    ]).then(startWebcam);
+
+    function startWebcam() {
+        navigator.mediaDevices
+            .getUserMedia({
+                video: true,
+                audio: false,
+            })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((error) => {
+                console.error('Error accessing webcam:', error);
+            });
+    }
+
+    function getLabeledFaceDescriptions() {
+        const labels = ["Kellen", "Pacifique"];
+        let userName = null;
+        return Promise.all(
+            labels.map(async (label) => {
+                const descriptions = [];
+                for (let i = 1; i <= 2; i++) {
+                    const img = await faceapi.fetchImage(`./labels/${label}/${i}.jpg`);
+                    const detections = await faceapi
+                        .detectSingleFace(img)
+                        .withFaceLandmarks()
+                        .withFaceDescriptor();
+                    descriptions.push(detections.descriptor);
+                }
+                return new faceapi.LabeledFaceDescriptors(label, descriptions);
+            })
+        );
+    }
+
+    video.addEventListener('play', async () => {
+        const labeledFaceDescriptors = await getLabeledFaceDescriptions();
+        const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+
+        const canvas = faceapi.createCanvasFromMedia(video);
+        canvasContainer.appendChild(canvas);
+
+        const displaySize = { width: video.width, height: video.height };
+        faceapi.matchDimensions(canvas, displaySize);
+
+        setInterval(async () => {
+            const detections = await faceapi
+                .detectAllFaces(video)
+                .withFaceLandmarks()
+                .withFaceDescriptors();
+
+            const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+
+            const results = resizedDetections.map((d) => {
+                return faceMatcher.findBestMatch(d.descriptor);
+            });
+            results.forEach((result, i) => {
+                const box = resizedDetections[i].detection.box;
+                const drawBox = new faceapi.draw.DrawBox(box, {
+                    label: result.toString(),
+                });
+                drawBox.draw(canvas);
+            });
+        }, 100);
+    });
+
+    // Function to capture and send the image data to the PHP script
+    document.getElementById('capture').addEventListener('click', () => {
+            const video = document.getElementById('video');
+            const canvasContainer = document.getElementById('canvas-container');
+            const captureButton = document.getElementById('capture');
+            const imageDataInput = document.getElementById('image-data');
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = video.width;
+            canvas.height = video.height;
+            context.drawImage(video, 0, 0, video.width, video.height);
+            const imageDataURL = canvas.toDataURL('image/jpeg'); // You can change the image format if needed
+
+            // Set the captured image data in the hidden input field
+            imageDataInput.value = imageDataURL;
+
+            // Submit the form to the PHP script for attendance recording
+            document.getElementById('attendance-form').submit();
         });
+     </script>
 
-      captureButton.addEventListener('click', () => {
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageDataURL = canvas.toDataURL('image/png');
-        imageDataInput.value = imageDataURL;
-      });
-
-      imageInput.addEventListener('change', () => {
-        const file = imageInput.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          imageDataInput.value = reader.result;
-        };
-        reader.onerror = (error) => {
-          console.error('Error reading image:', error);
-        };
-      });
-    </script>
 <script>
     (function(d, w, c) {
         w.ChatraID = 'njhpenbXDBbbEaETE';
