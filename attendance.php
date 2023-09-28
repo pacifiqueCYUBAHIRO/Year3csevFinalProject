@@ -5,6 +5,7 @@ if (!isset($_SESSION['logged-in'])) {
 // echo $_SESSION['logged-in'];
 }
 ?>
+
 <?php
 $allowedIPRange = "192.168.1.0/24"; // Example: Allow all IP addresses in the range 192.168.1.1 to 192.168.1.254
 $userIP = $_SERVER['REMOTE_ADDR'];
@@ -286,6 +287,7 @@ if (isset($_POST['update'])) {
 
         }
         .square{
+            /* display: absolute; */
             width: 300px;
             height: 280px;
             border: 2px solid black;
@@ -433,105 +435,99 @@ if (isset($_POST['update'])) {
 <div class="footer"> &COPY; 2023</div>
 
 <script>
-    const video = document.getElementById('video');
-    const canvasContainer = document.getElementById('canvas-container');
-    const captureButton = document.getElementById('capture');
-    const imageDataInput = document.getElementById('image-data');
-    const imageInput = document.getElementById('image');
+        const video = document.getElementById('video');
+        const canvasContainer = document.getElementById('canvas-container');
+        const captureButton = document.getElementById('capture');
+        const imageDataInput = document.getElementById('image-data');
+        const imageInput = document.getElementById('image');
 
-    Promise.all([
-        faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
-        faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
-        faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
-    ]).then(startWebcam);
+        Promise.all([
+            faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+        ]).then(startWebcam);
 
-    function startWebcam() {
-        navigator.mediaDevices
-            .getUserMedia({
-                video: true,
-                audio: false,
-            })
-            .then((stream) => {
-                video.srcObject = stream;
-            })
-            .catch((error) => {
-                console.error('Error accessing webcam:', error);
-            });
-    }
-
-    function getLabeledFaceDescriptions() {
-        const labels = ["Kellen", "Pacifique"];
-        let userName = null;
-        return Promise.all(
-            labels.map(async (label) => {
-                const descriptions = [];
-                for (let i = 1; i <= 2; i++) {
-                    const img = await faceapi.fetchImage(`./labels/${label}/${i}.jpg`);
-                    const detections = await faceapi
-                        .detectSingleFace(img)
-                        .withFaceLandmarks()
-                        .withFaceDescriptor();
-                    descriptions.push(detections.descriptor);
-                }
-                return new faceapi.LabeledFaceDescriptors(label, descriptions);
-            })
-        );
-    }
-
-    video.addEventListener('play', async () => {
-        const labeledFaceDescriptors = await getLabeledFaceDescriptions();
-        const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
-
-        const canvas = faceapi.createCanvasFromMedia(video);
-        canvasContainer.appendChild(canvas);
-
-        const displaySize = { width: video.width, height: video.height };
-        faceapi.matchDimensions(canvas, displaySize);
-
-        setInterval(async () => {
-            const detections = await faceapi
-                .detectAllFaces(video)
-                .withFaceLandmarks()
-                .withFaceDescriptors();
-
-            const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
-            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-
-            const results = resizedDetections.map((d) => {
-                return faceMatcher.findBestMatch(d.descriptor);
-            });
-            results.forEach((result, i) => {
-                const box = resizedDetections[i].detection.box;
-                const drawBox = new faceapi.draw.DrawBox(box, {
-                    label: result.toString(),
+        function startWebcam() {
+            navigator.mediaDevices
+                .getUserMedia({
+                    video: true,
+                    audio: false,
+                })
+                .then((stream) => {
+                    video.srcObject = stream;
+                })
+                .catch((error) => {
+                    console.error('Error accessing webcam:', error);
                 });
-                drawBox.draw(canvas);
-            });
-        }, 100);
-    });
+        }
 
-    // Function to capture and send the image data to the PHP script
-    document.getElementById('capture').addEventListener('click', () => {
-            const video = document.getElementById('video');
-            const canvasContainer = document.getElementById('canvas-container');
-            const captureButton = document.getElementById('capture');
-            const imageDataInput = document.getElementById('image-data');
+        function getLabeledFaceDescriptions() {
+            const labels = ["Kellen", "Pacifique"];
+            let userName = null;
+            return Promise.all(
+                labels.map(async (label) => {
+                    const descriptions = [];
+                    for (let i = 1; i <= 2; i++) {
+                        const img = await faceapi.fetchImage(`./labels/${label}/${i}.jpg`);
+                        const detections = await faceapi
+                            .detectSingleFace(img)
+                            .withFaceLandmarks()
+                            .withFaceDescriptor();
+                        descriptions.push(detections.descriptor);
+                    }
+                    return new faceapi.LabeledFaceDescriptors(label, descriptions);
+                })
+            );
+        }
 
+        video.addEventListener('play', async () => {
+            const labeledFaceDescriptors = await getLabeledFaceDescriptions();
+            const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+
+            // Create a canvas element to draw on
             const canvas = document.createElement('canvas');
+            canvasContainer.appendChild(canvas);
+
+            const displaySize = { width: video.width, height: video.height };
+            faceapi.matchDimensions(canvas, displaySize);
+
+            setInterval(async () => {
+                const detections = await faceapi
+                    .detectAllFaces(video)
+                    .withFaceLandmarks()
+                    .withFaceDescriptors();
+
+                const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
+                // Clear the canvas before drawing
+                canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+
+                const results = resizedDetections.map((d) => {
+                    return faceMatcher.findBestMatch(d.descriptor);
+                });
+                results.forEach((result, i) => {
+                    const box = resizedDetections[i].detection.box;
+                    const drawBox = new faceapi.draw.DrawBox(box, {
+                        label: result.toString(),
+                    });
+                    drawBox.draw(canvas);
+                });
+            }, 100);
+        });
+
+        // Function to capture and send the image data
+        document.getElementById('capture').addEventListener('click', () => {
+            const canvas = document.querySelector('canvas');
             const context = canvas.getContext('2d');
-            canvas.width = video.width;
-            canvas.height = video.height;
-            context.drawImage(video, 0, 0, video.width, video.height);
             const imageDataURL = canvas.toDataURL('image/jpeg'); // You can change the image format if needed
 
             // Set the captured image data in the hidden input field
             imageDataInput.value = imageDataURL;
 
-            // Submit the form to the PHP script for attendance recording
-            document.getElementById('attendance-form').submit();
+            // You can add code here to send the image data to a server or perform other actions
         });
-     </script>
+    </script>
+
 
 <script>
     (function(d, w, c) {

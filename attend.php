@@ -1,4 +1,12 @@
 <?php
+session_start();
+if (!isset($_SESSION['logged-in'])) {
+	header('Location: adminlog.html');
+// echo $_SESSION['logged-in'];
+}
+?>
+
+<?php
 $host = 'localhost';
 $user = 'root';
 $password = '';

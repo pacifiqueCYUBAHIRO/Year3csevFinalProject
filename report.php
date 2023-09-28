@@ -1,4 +1,10 @@
-
+<?php
+session_start();
+if (!isset($_SESSION['logged-in'])) {
+	header('Location: adminlog.html');
+// echo $_SESSION['logged-in'];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

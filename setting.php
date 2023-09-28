@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (!isset($_SESSION['logged-in'])) {
+	header('Location: adminlog.html');
+}
+?>
 
 <?php 
 $servername = "localhost";
@@ -17,7 +23,7 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin messages</title>
-  <!-- <link rel="stylesheet" href="styles.css"> -->
+
   <style>
     /*  import google fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
